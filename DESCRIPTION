@@ -1,0 +1,17 @@
+Package: nardata
+Title: NAR Data
+Version: 0.0.0.9000
+Authors@R: person("Carl", "Schroed", email = "cschroedl@usgs.gov",
+                  role = c("aut", "cre"))
+Description: This package versions the data and validation criteria for the
+                  NAWQAA Annual Reporting application 
+Depends: 
+    R (>= 3.2.0)
+License: file LICENSE
+RoxygenNote: 5.0.1
+Suggests: testthat,
+    devtools,
+    knitr,
+    rmarkdown
+VignetteBuilder: knitr
+LazyData: true
