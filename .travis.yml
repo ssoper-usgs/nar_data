@@ -1,0 +1,12 @@
+language: r
+sudo: required
+before_script:
+  - curl -s https://packagecloud.io/install/repositories/github/git-lfs/script.deb.sh | sudo bash
+  - sudo apt-get install git-lfs=1.1.0
+# On travis using git-lfs 1.1.0, must prevent git lfs from writing directly to stdout.
+# This is a known bug for which a fix has been merged into upstream.
+# see: https://github.com/github/git-lfs/issues/880
+  - git lfs fetch > /tmp/git-lfs-fetch.log
+  - cat /tmp/git-lfs-fetch.log
+  - git lfs checkout > /tmp/git-lfs-checkout.log
+  - cat /tmp/git-lfs-checkout.log
