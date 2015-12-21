@@ -10,11 +10,10 @@ Depends:
 License: file LICENSE
 Imports: 
     ggplot2,
-    roxygen2,
-    devtools,
-    testthat
+    roxygen2
 RoxygenNote: 5.0.1
 Suggests: testthat,
+    devtools,
     knitr,
     rmarkdown
 VignetteBuilder: knitr
