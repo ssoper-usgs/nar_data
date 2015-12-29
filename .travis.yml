@@ -3,6 +3,11 @@ sudo: required
 before_script:
   - curl -s https://packagecloud.io/install/repositories/github/git-lfs/script.deb.sh | sudo bash
   - sudo apt-get install git-lfs=1.1.0
+# git-lfs 1.1.0 always prompts for a password, even when anonymous access is ok
+# to bypass the prompt, create a dummy credentials file:
+  - echo 'https://:@cida-test.er.usgs.gov' > .git-credentials
+# and tell git to use it:
+  - git config --global credential.helper 'store --file .git-credentials'
 # On travis using git-lfs 1.1.0, must prevent git lfs from writing directly to stdout.
 # This is a known bug for which a fix has been merged into upstream.
 # see: https://github.com/github/git-lfs/issues/880 
