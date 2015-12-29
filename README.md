@@ -6,4 +6,6 @@ When retrieving large files from the server (ex: cloning, pulling), you will be 
 
 To perform read-only checkouts of this project without being prompted for credentials run:
 
+```
 git config --global credential.helper 'store --file .anonymous-git-credentials'
+```
