@@ -5,3 +5,5 @@ appveyor.yml
 .gitignore
 .gitattributes
 README.md
+.anonymous-git-credentials
+.gitconfig
