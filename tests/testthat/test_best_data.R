@@ -22,10 +22,21 @@ expect_no_errors <- function(validation) {
 
 test_that("best data has a reasonable range of values", {
 	result <- validate::check_that(best_data, x > 0, x < 4, nchar(y) == 1)
-	#print(str(summary(result)))
-	#print(str(errors(result)))
 	expect_no_errors(result)
 	
+})
+
+test_that("annual flow's columns are correctly typed", {
+	result <- validate::check_that(aflow,
+		is.double(FLOW),
+		is.integer(WY),
+		is.character(c(
+			SITE_ABB,
+			SITE_QW_ID,
+			SITE_FLOW_ID
+		))
+	)
+	expect_no_errors(result)
 })
 
 test_that("annual flow has a reasonable range of values", {
