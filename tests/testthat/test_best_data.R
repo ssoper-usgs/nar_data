@@ -41,11 +41,11 @@ test_that("annual flow's columns are correctly typed", {
 
 test_that("annual flow has a reasonable range of values", {
 	result <- validate::check_that(aflow, 
-																 FLOW > 0,
-																 FLOW < 1E10,
-																 nchar(SITE_ABB) == 4,
-																 WY < 2020,
-																 WY > 1950
+		FLOW > 0,
+		FLOW < 1E10,
+		nchar(SITE_ABB) == 4,
+		WY < 2020,
+		WY > 1950
 	)
 	expect_no_errors(result)
 })
