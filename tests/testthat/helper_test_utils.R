@@ -1,3 +1,5 @@
+library(validate)
+library(testthat)
 expect_no_errors <- function(validation) {
 	the_summary <- validate::summary(validation)
 	error_count <- sum(the_summary$fails)
@@ -9,5 +11,5 @@ expect_no_errors <- function(validation) {
 		expect_equal(TRUE, TRUE)
 	}
 	
-	barplot(validation, main = "check out dat data")
+	barplot(validation)
 }
