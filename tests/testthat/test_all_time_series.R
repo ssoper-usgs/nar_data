@@ -15,5 +15,5 @@ expect_consistent_missing_value_representation <- function(dataframe) {
 }
 
 test_that('there are consistent missing value representations in all time series data frames', {
-	Map(expect_consistent_missing_value_representation, c(aloads, aflow, dflow))
+	Map(expect_consistent_missing_value_representation, c(aloads, aflow, dflow, mloads, mflow))
 })

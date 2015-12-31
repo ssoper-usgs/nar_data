@@ -1,25 +1,26 @@
 library(testthat)
 library(validate)
-context("annual flow")
+context("monthly flow")
 
 #looking for more thorough explanation of the 'validate' library capabilities?
 #Run:
 # vignette("intro", package="validate")
 
-test_that("annual flow has the correct columns", {
-	expect_has_names(aflow, c(
+test_that("monthly flow has the correct columns", {
+	expect_has_names(mflow, c(
 		"SITE_ABB",
 		"SITE_FLOW_ID",
 		"SITE_QW_ID",
 		"WY",
+		"MONTH",
 		"FLOW"
 	))
 })
 
-test_that("annual flow's columns are correctly typed", {
-	result <- validate::check_that(aflow,
+test_that("monthly flow's columns are correctly typed", {
+	result <- validate::check_that(mflow,
 		is.double(FLOW),
-		is.integer(WY),
+		is.integer(c(WY, MONTH)),
 		is.character(c(
 			SITE_ABB,
 			SITE_QW_ID,
@@ -29,9 +30,9 @@ test_that("annual flow's columns are correctly typed", {
 	expect_no_errors(result)
 })
 
-test_that("annual flow has a reasonable range of values", {
-	result <- validate::check_that(aflow, 
-		FLOW > 0,
+test_that("monthly flow has a reasonable range of values", {
+	result <- validate::check_that(mflow, 
+		FLOW > -4E6,
 		FLOW < 1E10,
 		nchar(SITE_ABB) == 4,
 		WY < 2020,
