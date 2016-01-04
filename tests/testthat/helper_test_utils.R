@@ -1,6 +1,5 @@
 library(validate)
 library(testthat)
-library(compare)
 
 # Determines whether the validation has errors. If it does, create a helpful 
 # failure message and fail the present test.
@@ -22,12 +21,14 @@ expect_no_errors <- function(validation) {
 # @param dataframe data.frame to check for same columns
 # @param names character vector of column names
 expect_has_names <- function(dataframe, names) {
-	same_names <- compare::isTRUE(compare::compareIgnoreOrder(names, names(dataframe)))
+	dataframe_names <- names(dataframe)
+	expect_equal(length(names), length(dataframe_names))
+	same_names <- all(names %in% dataframe_names)
 	if (same_names) {
 		expect_true(TRUE)
 	} else {
 		expected_names <- paste(sort(names), collapse = "\n")
-		actual_names <- paste(sort(names(dataframe)), collapse = "\n")
+		actual_names <- paste(sort(dataframe_names), collapse = "\n")
 		error_message <- paste('expected names', expected_names, '\nactual names', actual_names, sep = "\n")
 		fail(error_message)
 	}
