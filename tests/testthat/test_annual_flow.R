@@ -6,6 +6,16 @@ context("annual flow")
 #Run:
 # vignette("intro", package="validate")
 
+test_that("annual flow has the correct columns", {
+	expect_has_names(aflow, c(
+		"SITE_ABB",
+		"SITE_FLOW_ID",
+		"SITE_QW_ID",
+		"WY",
+		"FLOW"
+	))
+})
+
 test_that("annual flow's columns are correctly typed", {
 	result <- validate::check_that(aflow,
 		is.double(FLOW),
