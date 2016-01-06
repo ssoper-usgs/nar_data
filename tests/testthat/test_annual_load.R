@@ -51,9 +51,9 @@ test_that("annual load has a reasonable range of values", {
 #
 # Note that for the ALEX row, TONS_L95 > TONS_U95 > TONS
 
-	#	TONS_L95 < TONS_U95,
-	#	TONS_L95 < TONS,
-	#	TONS < TONS_U95,
+		TONS_L95 < TONS_U95,
+		TONS_L95 < TONS,
+		TONS < TONS_U95,
 		nchar(SITE_ABB) == 4,
 		WY < 2020,
 		WY > 1950
