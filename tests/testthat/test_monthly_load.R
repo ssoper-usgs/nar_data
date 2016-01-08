@@ -41,9 +41,9 @@ test_that("monthly load has a reasonable range of values", {
 		TONS > 0,
 		TONS < 5E8,
 # disabling the following checks until confirmation can be obtained about these failing rows:
-		#TONS_L95 < TONS_U95,
-		#TONS_L95 < TONS,
-		#TONS < TONS_U95,
+		TONS_L95 < TONS_U95,
+		TONS_L95 < TONS,
+		TONS < TONS_U95,
 		nchar(SITE_ABB) == 4,
 		WY < 2020,
 		WY > 1950,
