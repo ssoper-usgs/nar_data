@@ -40,7 +40,6 @@ test_that("monthly load has a reasonable range of values", {
 	result <- validate::check_that(mloads, 
 		TONS > 0,
 		TONS < 5E8,
-# disabling the following checks until confirmation can be obtained about these failing rows:
 		TONS_L95 < TONS_U95,
 		TONS_L95 < TONS,
 		TONS < TONS_U95,

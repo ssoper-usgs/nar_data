@@ -41,16 +41,6 @@ test_that("annual load has a reasonable range of values", {
 	result <- validate::check_that(aloads, 
 		TONS > 0,
 		TONS < 5E8,
-
-# disabling the following checks until confirmation can be obtained about these rows:
-#
-# > subset(aloads, TONS_U95 < TONS)
-#     SITE_ABB SITE_QW_ID SITE_FLOW_ID CONSTIT   WY MODTYPE    TONS TONS_L95 TONS_U95    FWC  YIELD
-#3827     LITT   07263620     07263450     SSC 1998   REG_4 5030000 2.59e-03   501000 92.600 31.700
-#4036     ALEX   07355500         <NA> NO3_NO2 2007 REGHIST   10600 1.74e+04     6010  0.217  0.157
-#
-# Note that for the ALEX row, TONS_L95 > TONS_U95 > TONS
-
 		TONS_L95 < TONS_U95,
 		TONS_L95 < TONS,
 		TONS < TONS_U95,
