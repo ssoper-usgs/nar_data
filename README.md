@@ -13,3 +13,4 @@ To perform read-only checkouts of this project without being prompted for creden
 ```
 git config --global credential.helper 'store --file .anonymous-git-credentials'
 ```
+

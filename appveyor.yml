@@ -1,19 +1,16 @@
 init:
-  ps: |
+  - ps: |
         $ErrorActionPreference = "Stop"
         Invoke-WebRequest http://raw.github.com/krlmlr/r-appveyor/master/scripts/appveyor-tool.ps1 -OutFile "..\appveyor-tool.ps1"
         Import-Module '..\appveyor-tool.ps1'
+  - cmd: echo "https://:@cida.usgs.gov" > C:\projects\.anonymous-git-credentials
+  - cmd: git config --global credential.helper "store --file C:\projects\.anonymous-git-credentials"
+
 install:
   - ps: Bootstrap
-  - cinst: git-lfs.install
 
 environment:
   NOT_CRAN: "true"
-
-before_build:
-  - cmd: git config --global credential.helper "store --file .anonymous-git-credentials"
-  - cmd: git lfs fetch
-  - cmd: git lfs checkout
 
 build_script:
   - travis-tool.sh install_deps
