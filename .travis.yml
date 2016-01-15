@@ -13,3 +13,6 @@ before_script:
   - cat /tmp/git-lfs-fetch.log
   - git lfs checkout > /tmp/git-lfs-checkout.log
   - cat /tmp/git-lfs-checkout.log
+script:
+  - R -e 'library(nardata);source("R/serialize_time_series.R"); serialize_time_series();'
+  - test ! -n "`git ls-files -o inst/extdata/`";
