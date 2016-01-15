@@ -14,5 +14,6 @@ before_script:
   - git lfs checkout > /tmp/git-lfs-checkout.log
   - cat /tmp/git-lfs-checkout.log
 script:
+  - ./travis-tool.sh run_tests
   - R -e 'library(nardata);source("R/serialize_time_series.R"); serialize_time_series();'
   - test ! -n "`git ls-files -mo inst/extdata/`";
