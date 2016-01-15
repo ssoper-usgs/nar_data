@@ -27,7 +27,7 @@ test_that("pesticide annual weighted average data's columns are correctly typed"
 	expect_no_errors(result)
 })
 
-test_that("60-day moving average data has reasonable range of values", {
+test_that("pesticide annual weighted average data's  has reasonable range of values", {
 	result <- validate::check_that(pestweightave, 
 		CONCENTRATION > 0,
 		CONCENTRATION < 1000,
@@ -35,4 +35,11 @@ test_that("60-day moving average data has reasonable range of values", {
 		NSAMP>0
 	)
 	expect_no_errors(result)
+})
+
+test_that("pesticide annual weighted average data's REMARK has only blank or less than values in the remark field", {
+  remarks<- sort(levels(pestweightave$REMARK))
+  expected_remarks<-sort(c("","<"))
+  expect_true(all(remarks==expected_remarks))
+  
 })

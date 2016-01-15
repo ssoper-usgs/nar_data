@@ -54,3 +54,12 @@ test_that("discrete qw data has reasonable range of values", {
 	)
 	expect_no_errors(result)
 })
+
+unique(pestsamp$REMARK)
+
+test_that("pesticide remark data has only blank, less than, greater than, or E values in the remark field", {
+  remarks<- sort(levels(pestsamp$REMARK))
+  expected_remarks<-sort(c("","<",">","E"))
+  expect_true(all(remarks==expected_remarks))
+  
+})
