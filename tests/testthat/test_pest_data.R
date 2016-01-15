@@ -16,28 +16,29 @@ test_that("pesticide sample data has the correct columns", {
 		"DATE",
 		"WY",
 		"CONSTIT",
-		"acute_fish",
-		"acute_invert",
-		"chronic_fish",
-		"chronic_invert",
-		"plant",
-		"planttype",
-		"hh",
-		"hh_chronic",
-		"hh_acute",
+		"ACUTE_FISH",
+		"ACUTE_INVERT",
+		"CHRONIC_FISH",
+		"CHRONIC_INVERT",
+		"PLANT",
+		"PLANTTYPE",
+		"HH",
+		"HH_CHRONIC",
+		"HH_ACUTE",
 		"LRL"
 	))
 })
 
 test_that("pesticide sample data's columns are correctly typed", {
 	result <- validate::check_that(pestsamp,
-		is.double(c(CONCENTRATION,acute_fish,acute_invert,chronic_fish,chronic_invert,plant,hh,hh_chronic,hh_acute,LRL)),
+		is.double(c(CONCENTRATION,ACUTE_FISH,ACUTE_INVERT,CHRONIC_FISH,CHRONIC_INVERT,PLANT,HH,HH_CHRONIC,HH_ACUTE,LRL)),
 		is.integer(WY),
 		is.character(c(
 			PARM_CD,
 			REMARK,
-			SITE_QW_ID,DATETIME,planttype
+			SITE_QW_ID,DATETIME,PLANTTYPE
 		)),
+		is.date(DATE),
 		is.factor(CONSTIT)
 	)
 	expect_no_errors(result)

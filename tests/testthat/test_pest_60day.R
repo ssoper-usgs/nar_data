@@ -20,8 +20,9 @@ test_that("pesticide 60 day moving average data's columns are correctly typed", 
 	result <- validate::check_that(pest60day,
 		is.double(c(DAY60,LRL)),
 		is.character(c(
-			SITE_QW_ID,DATE
+			SITE_QW_ID
 		)),
+		is.date(DATE),
 		is.factor(CONSTIT)
 	)
 	expect_no_errors(result)

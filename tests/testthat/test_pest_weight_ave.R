@@ -21,8 +21,8 @@ test_that("pesticide annual weighted average data's columns are correctly typed"
 	result <- validate::check_that(pestweightave,
 		is.double(CONCENTRATION),
 		is.integer(c(WY,NSAMP)),
-		is.character(c(SITE_QW_ID,REMARK)),
-		is.factor(CONSTIT)
+		is.character(c(SITE_QW_ID)),
+		is.factor(CONSTIT,REMARK)
 	)
 	expect_no_errors(result)
 })
