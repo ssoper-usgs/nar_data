@@ -1,3 +1,4 @@
+#'@importFrom R.utils toCamelCase
 #'@export
 generate_code <- function(){
   lapply(get_time_series_data_frame_names(), write_out_ddl)
@@ -16,6 +17,15 @@ write_out_ddl <- function(dataframe_name){
 write_out_liquibase <- function(dataframe_name){
   dataframe <- get(dataframe_name)
   file_name <- paste0(BASE_PATH, dataframe_name, '.xml')
+  sink(file=file_name)
+  mapresults(dataframe)
+  sink()
+  return(file_name);
+}
+
+write_out_mapper <- function(dataframe_name){
+  dataframe <- get(dataframe_name)
+  file_name <- paste0(BASE_PATH, dataframe_name, 'Mapper.xml')
   sink(file=file_name)
   liquibase(dataframe)
   sink()
@@ -47,6 +57,27 @@ liquibase <- function(df) {
     column <- paste0('\t\t\t<column name="', tolower(names[i]), '" ')
     column <- paste0(column, 'header="', names[i], '" ')
     column <- paste0(column, 'type="', type, '" />\n')
+    cat(column)
+  }
+}
+
+mapresults <- function(df) {
+  names <- colnames(df)
+  for (i in 1:ncol(df)) {
+    column <- paste0('\t\t<result property="', toCamelCase(tolower(names[i]), split="_"), '" ')
+    column <- paste0(column, 'column="', tolower(names[i]), '" />\n')
+    cat(column)
+  }
+}
+
+columns <- function(df) {
+  names <- colnames(df)
+  for (i in 1:ncol(df)) {
+    column <- paste0('\t\t', tolower(names[i]))
+    if(i != ncol(df)) {
+      column <- paste0(column, ',')
+    }
+    column <- paste0(column, '\n')
     cat(column)
   }
 }
