@@ -26,4 +26,6 @@ test_that("constituent abbreviations are consistent", {
 		}
 		
 	}, actual_constituents_list)
-})
+	#if it didn't fail yet, then it must have succeeded
+	succeed()
+	})
