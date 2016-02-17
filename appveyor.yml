@@ -19,6 +19,7 @@ test_script:
   - travis-tool.sh run_tests
 
 on_failure:
+  - git lfs logs last
   - travis-tool.sh dump_logs
 
 artifacts:
