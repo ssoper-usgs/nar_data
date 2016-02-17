@@ -7,14 +7,24 @@ write_out <- function(dataframe_name){
 	return(file_name);
 }
 
-serialize_time_series <- function(){
-	data_frame_names <- c(
+#'@export
+get_time_series_data_frame_names <- function(){
+	return(list(
 		'discqw',
 		'aloads',
 		'mloads',
 		'aflow',
 		'mflow',
-		'dflow'
-	)
-	lapply(data_frame_names, write_out)
+		'dflow',
+		'pest21day',
+		'pest60day',
+		'pestsamp',
+		'pestsites',
+		'pestweightave'
+	))
+}
+
+#'@export
+serialize_time_series <- function(){
+	lapply(get_time_series_data_frame_names(), write_out)
 }

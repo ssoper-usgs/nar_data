@@ -2,14 +2,15 @@ library(validate)
 library(testthat)
 context("all time series")
 
-all_time_series <- list(aloads, aflow, dflow, mloads, mflow)
+all_time_series_names <- nardata::get_time_series_data_frame_names()
+all_time_series <- Map(get, all_time_series_names)
 
-expect_more_than_one_site_id_with_a_leading_zero <- function(dataframe) {
+expect_at_least_one_site_id_with_a_leading_zero <- function(dataframe) {
 	expect_true(any(substr(dataframe$SITE_QW_ID, 1, 1) == '0'))
 }
 
 test_that('there is at least one site with a leading zero in all the time series data frames', {
-	Map(expect_more_than_one_site_id_with_a_leading_zero, all_time_series)
+	Map(expect_at_least_one_site_id_with_a_leading_zero, all_time_series)
 })
 
 expect_consistent_missing_value_representation <- function(dataframe) {
