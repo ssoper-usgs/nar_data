@@ -67,3 +67,9 @@ test_that("pesticide remark data has only blank, less than, greater than, or E v
   expect_true(all(remarks==expected_remarks))
   
 })
+
+discqw[discqw$SITE_QW_ID%in%"07288650"&discqw$CONSTIT%in%"NO3_NO2"&discqw$WY%in%2014,]
+setwd("F:/U/Annualreport/nfsnsitedata/WY2014/")
+tst<-read.delim("DiscQW.txt",colClasses="character")
+tst[tst$SITE_QW_ID%in%"07288650"&tst$CONSTIT%in%"NO3_NO2"&tst$WY%in%2014,]
+
