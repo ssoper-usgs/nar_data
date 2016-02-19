@@ -1,7 +1,8 @@
 library(testthat)
 library(validate)
 context("may flow")
-
+temp_mflow<-mflow 
+temp_mflow_recent<-mflow[mflow$WY %in% max(mflow$WY),] 
 #looking for more thorough explanation of the 'validate' library capabilities?
 #Run:
 # vignette("intro", package="validate")
@@ -39,3 +40,41 @@ test_that("may flow has a reasonable range of values", {
 	)
 	expect_no_errors(result)
 })
+
+test_that("may flow is less than corresponding annual flows for a given site/water year", {
+  temp_mflow$aflow<-aflow[match(paste(temp_mflow$SITE_ABB,temp_mflow$WY,sep="_"),paste(aflow$SITE_ABB,aflow$WY,sep="_")),"FLOW"]
+  
+  result <- validate::check_that(temp_mflow, 
+                                 FLOW < aflow
+  )
+  expect_no_errors(result)
+})
+
+test_that("Most recent water year has all of the necessary sites ", {
+  result <- validate::check_that(temp_mflow_recent, 
+                            sort(unique(SITE_ABB)) == sort(c("HAZL","PADU","GRAN","HAST","CLIN","WAPE","KEOS","VALL","GRAF","SIDN","OMAH","ELKH","LOUI","DESO","HERM","THEB","SEDG","HARR","LITT","LONG",
+                                                       "STFR","BATO","BELL","MELV","CALU","MORG","VICK","SEWI","SUMN","STTH","ALEX","GULF","NEWH","CANN"))
+                                
+  )
+  
+  expect_no_errors(result)
+})
+
+
+test_that("Flow data have the correct number of significant digits", {
+  result <- validate::check_that(mflow, 
+                                 nchar( signif(mflow[mflow$FLOW>=100000000,"FLOW"]/10000000))<=4,
+                                 nchar( signif(mflow[mflow$FLOW<100000000&mflow$FLOW>=10000000,"FLOW"]/10000000))<=4,
+                                 nchar( signif(mflow[mflow$FLOW<10000000&mflow$FLOW>=1000000,"FLOW"]/1000000))<=4,
+                                 nchar( signif(mflow[mflow$FLOW<1000000&mflow$FLOW>=100000,"FLOW"]/100000))<=4,
+                                 nchar( signif(mflow[mflow$FLOW<100000&mflow$FLOW>=10000,"FLOW"]/10000))<=4,
+                                 nchar( signif(mflow[mflow$FLOW<10000&mflow$FLOW>=1000,"FLOW"]/1000))<=4,
+                                 nchar( signif(mflow[mflow$FLOW<1000&mflow$FLOW>=100,"FLOW"]/100))<=4,
+                                 nchar( signif(mflow[mflow$FLOW<100&mflow$FLOW>=10,"FLOW"]/10))<=4,
+                                 nchar( signif(mflow[mflow$FLOW<10&mflow$FLOW>=1,"FLOW"]))<=4
+                                 
+                                 )
+  
+  
+})
+
