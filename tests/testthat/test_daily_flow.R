@@ -45,18 +45,10 @@ test_that("daily flow has a reasonable range of values", {
 
 test_that("Flow data have the correct number of significant digits", {
   result <- validate::check_that(dflow, 
-                                 nchar( signif(dflow[dflow$FLOW>=100000000,"FLOW"]/10000000))<=4,
-                                 nchar( signif(dflow[dflow$FLOW<100000000&dflow$FLOW>=10000000,"FLOW"]/10000000))<=4,
-                                 nchar( signif(dflow[dflow$FLOW<10000000&dflow$FLOW>=1000000,"FLOW"]/1000000))<=4,
-                                 nchar( signif(dflow[dflow$FLOW<1000000&dflow$FLOW>=100000,"FLOW"]/100000))<=4,
-                                 nchar( signif(dflow[dflow$FLOW<100000&dflow$FLOW>=10000,"FLOW"]/10000))<=4,
-                                 nchar( signif(dflow[dflow$FLOW<10000&dflow$FLOW>=1000,"FLOW"]/1000))<=4,
-                                 nchar( signif(dflow[dflow$FLOW<1000&dflow$FLOW>=100,"FLOW"]/100))<=4,
-                                 nchar( signif(dflow[dflow$FLOW<100&dflow$FLOW>=10,"FLOW"]/10))<=4,
-                                 nchar( signif(dflow[dflow$FLOW<10&dflow$FLOW>=1,"FLOW"]))<=4
+                                 
+                                 nchar(sub("^[0]+", "",sub("[.]","",abs(dflow$FLOW/1E7))))<=3
                                  
   )
-  
-  
+    
 })
 

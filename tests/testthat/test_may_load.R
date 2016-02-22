@@ -1,11 +1,12 @@
 library(testthat)
 library(validate)
+library(dplyr)
 context("may load")
 
 temp_mloads<-mloads 
-temp_mloads$TONSN<-as.numeric(temp_mloads$TONS)
-temp_mloads$TONSN_L95<-as.numeric(temp_mloads$TONS_L95)
-temp_mloads$TONSN_U95<-as.numeric(temp_mloads$TONS_U95)
+temp_mloads$TONS_N<-as.numeric(temp_mloads$TONS)
+temp_mloads$TONS_L95_N<-as.numeric(temp_mloads$TONS_L95)
+temp_mloads$TONS_U95_N<-as.numeric(temp_mloads$TONS_U95)
 
 temp_mloads_recent<-temp_mloads[temp_mloads$WY %in% max(temp_mloads$WY),] 
 
@@ -44,11 +45,11 @@ test_that("may load's columns are correctly typed", {
 
 test_that("may load has a reasonable range of values", {
 	result <- validate::check_that(temp_mloads, 
-		TONSN > 0,
-		TONSN < 5E8,
-		TONSN_L95 < TONSN_U95,
-		TONSN_L95 < TONSN,
-		TONSN < TONSN_U95,
+		TONS_N > 0,
+		TONS_N < 5E8,
+		TONS_L95_N < TONS_U95_N,
+		TONS_L95_N < TONS_N,
+		TONS_N < TONS_U95_N,
 		nchar(SITE_ABB) == 4,
 		WY < 2020,
 		WY > 1950
@@ -64,13 +65,20 @@ test_that("may loads for the MISS site are included", {
 
 
 test_that("may loads are less than corresponding annual loads for a given site/water year/constituent", {
-  temp_mloads$aloads<-as.numeric(aloads[match(paste(temp_mloads$SITE_ABB,temp_mloads$WY,temp_mloads$CONSTIT,sep="_"),paste(aloads$SITE_ABB,aloads$WY,aloads$CONSTIT,sep="_")),"TONS"])
-
-  result <- validate::check_that(temp_mloads, 
-                                 TONSN < aloads
-  )
-  expect_no_errors(result)
+ #an earlier option using match is to merge the aloads and temp_mloads data frame is commented out for now.
+   #temp_mloads$aloads<-as.numeric(aloads[match(paste(temp_mloads$SITE_ABB,temp_mloads$WY,temp_mloads$CONSTIT,sep="_"),paste(aloads$SITE_ABB,aloads$WY,aloads$CONSTIT,sep="_")),"TONS"])
+   tt<-left_join(temp_mloads, aloads, by = c("SITE_ABB" = "SITE_ABB", "WY" = "WY","CONSTIT"="CONSTIT"))
+     result <- validate::check_that(tt, 
+                                 TONS_N < as.numeric(TONS.y)
+                             
+                                 
+                                 )
+  
+     
+     expect_no_errors(result)
 })
+
+
 
 
 test_that("Most recent water year has all of the necessary sites ", {
@@ -89,31 +97,9 @@ test_that("Most recent water year has all of the necessary sites ", {
 test_that("Load data have the correct number of significant digits", {
   result <- validate::check_that(temp_mloads, 
                                  
-                                 nchar( signif(temp_mloads[temp_mloads$TONSN<1000000&temp_mloads$TONSN>=100000,"TONSN"]/100000))<=4,
-                                 nchar( signif(temp_mloads[!is.na(temp_mloads$TONSN_L95)&temp_mloads$TONSN_L95<1000000&temp_mloads$TONSN_L95>=100000,"TONSN_L95"]/100000))<=4,
-                                 nchar(signif( temp_mloads[!is.na(temp_mloads$TONSN_U95)&temp_mloads$TONSN_U95<1000000&temp_mloads$TONSN_U95>=100000,"TONSN_U95"]/100000))<=4,
-                                 nchar( signif(temp_mloads[temp_mloads$TONSN<100000&temp_mloads$TONSN>=10000,"TONSN"]/10000))<=4,
-                                 nchar( signif(temp_mloads[!is.na(temp_mloads$TONSN_L95)&temp_mloads$TONSN_L95<100000&temp_mloads$TONSN_L95>=10000,"TONSN_L95"]/10000))<=4,
-                                 nchar( signif(temp_mloads[!is.na(temp_mloads$TONSN_U95)&temp_mloads$TONSN_U95<100000&temp_mloads$TONSN_U95>=10000,"TONSN_U95"]/10000))<=4,
-                                 nchar(signif( temp_mloads[temp_mloads$TONSN<10000&temp_mloads$TONSN>=1000,"TONSN"]/1000))<=4,
-                                 nchar(signif( temp_mloads[!is.na(temp_mloads$TONSN_L95)&temp_mloads$TONSN_L95<10000&temp_mloads$TONSN_L95>=1000,"TONSN_L95"]/1000))<=4,
-                                 nchar(signif( temp_mloads[!is.na(temp_mloads$TONSN_U95)&temp_mloads$TONSN_U95<10000&temp_mloads$TONSN_U95>=1000,"TONSN_U95"]/1000))<=4,
-                                 nchar(signif( temp_mloads[temp_mloads$TONSN<1000&temp_mloads$TONSN>=100,"TONSN"]/100 ))<=4,
-                                 nchar(signif(temp_mloads[!is.na(temp_mloads$TONSN_L95)&temp_mloads$TONSN_L95<1000&temp_mloads$TONSN_L95>=100,"TONSN_L95"]/100))<=4,
-                                 nchar( signif(temp_mloads[!is.na(temp_mloads$TONSN_U95)&temp_mloads$TONSN_U95<1000&temp_mloads$TONSN_U95>=100,"TONSN_U95"]/100))<=4,
-                                 nchar( signif(temp_mloads[temp_mloads$TONSN<100&temp_mloads$TONSN>=10,"TONSN"]/10))<=4,
-                                 nchar(signif( temp_mloads[!is.na(temp_mloads$TONSN_L95)&temp_mloads$TONSN_L95<100&temp_mloads$TONSN_L95>=10,"TONSN_L95"]/10))<=4,
-                                 nchar(signif( temp_mloads[!is.na(temp_mloads$TONSN_U95)&temp_mloads$TONSN_U95<100&temp_mloads$TONSN_U95>=10,"TONSN_U95"]/10))<=4,
-                                 nchar( signif(temp_mloads[temp_mloads$TONSN<10&temp_mloads$TONSN>=1,"TONSN"]))<=4,
-                                 nchar(signif( temp_mloads[!is.na(temp_mloads$TONSN_L95)&temp_mloads$TONSN_L95<10&temp_mloads$TONSN_L95>=1,"TONSN_L95"]))<=4,
-                                 nchar(signif( temp_mloads[!is.na(temp_mloads$TONSN_U95)&temp_mloads$TONSN_U95<10&temp_mloads$TONSN_U95>=1,"TONSN_U95"]))<=4,
-                                 nchar(signif( temp_mloads[temp_mloads$TONSN<1&temp_mloads$TONSN>=.1,"TONSN"]*10))<=4,
-                                 nchar(signif( temp_mloads[!is.na(temp_mloads$TONSN_L95)&temp_mloads$TONSN_L95<1&temp_mloads$TONSN_L95>=.1,"TONSN_L95"]*10))<=4,
-                                 nchar(signif( temp_mloads[!is.na(temp_mloads$TONSN_U95)&temp_mloads$TONSN_U95<1&temp_mloads$TONSN_U95>=.1,"TONSN_U95"]*10))<=4,
-                                 nchar(signif(temp_mloads[temp_mloads$TONSN<.1&temp_mloads$TONSN>=.01,"TONSN"]*100))<=4,
-                                 nchar(signif( temp_mloads[!is.na(temp_mloads$TONSN_L95)&temp_mloads$TONSN_L95<.1&temp_mloads$TONSN_L95>=.01,"TONSN_L95"]*100))<=4,
-                                 nchar(signif( temp_mloads[!is.na(temp_mloads$TONSN_U95)&temp_mloads$TONSN_U95<.1&temp_mloads$TONSN_U95>=.01,"TONSN_U95"]*100))<=4
-                                 
+                                 nchar(sub("^[0]+", "",sub("[.]","",temp_mloads$TONS_N/1E5)))<=3,
+                                 nchar(sub("^[0]+", "",sub("[.]","",temp_mloads$TONS_L95_N/1E5)))<=3,
+                                 nchar(sub("^[0]+", "",sub("[.]","",temp_mloads$TONS_U95_N/1E5)))<=3
                                  
                                  )
   

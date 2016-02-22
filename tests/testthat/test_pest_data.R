@@ -3,7 +3,7 @@ library(validate)
 context("pesticide sample data")
 
 temp_pestsamp<-pestsamp
-temp_pestsamp$CONCENTRATIONN<-as.numeric(temp_pestsamp$CONCENTRATION)
+temp_pestsamp$CONCENTRATION_N<-as.numeric(temp_pestsamp$CONCENTRATION)
 
 #looking for more thorough explanation of the 'validate' library capabilities?
 #Run:
@@ -52,7 +52,7 @@ test_that("pesticide sample data's columns are correctly typed", {
 
 test_that("pesticide data has reasonable range of values", {
 	result <- validate::check_that(temp_pestsamp, 
-		CONCENTRATIONN > 0,
+		CONCENTRATION_N > 0,
 LRL<=1,
 		WY < 2020,
 		WY > 1950
@@ -67,9 +67,3 @@ test_that("pesticide remark data has only blank, less than, greater than, or E v
   expect_true(all(remarks==expected_remarks))
   
 })
-
-discqw[discqw$SITE_QW_ID%in%"07288650"&discqw$CONSTIT%in%"NO3_NO2"&discqw$WY%in%2014,]
-setwd("F:/U/Annualreport/nfsnsitedata/WY2014/")
-tst<-read.delim("DiscQW.txt",colClasses="character")
-tst[tst$SITE_QW_ID%in%"07288650"&tst$CONSTIT%in%"NO3_NO2"&tst$WY%in%2014,]
-

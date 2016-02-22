@@ -3,7 +3,7 @@ library(validate)
 context("discrete water quality")
 head(discqw)
 temp_discqw<-discqw
-temp_discqw$CONCENTRATIONN<-as.numeric(temp_discqw$CONCENTRATION)
+temp_discqw$CONCENTRATION_N<-as.numeric(temp_discqw$CONCENTRATION)
 #looking for more thorough explanation of the 'validate' library capabilities?
 #Run:
 # vignette("intro", package="validate")
@@ -40,8 +40,8 @@ test_that("discrete qw's columns are correctly typed", {
 
 test_that("discrete qw has a reasonable range of values", {
 	result <- validate::check_that(temp_discqw, 
-		CONCENTRATIONN >= 0,
-		CONCENTRATIONN < 100000
+		CONCENTRATION_N >= 0,
+		CONCENTRATION_N < 100000
 	)
 	expect_no_errors(result)
 })
@@ -57,15 +57,7 @@ test_that("discrete qw has only blank or less than values in the remark field", 
 
 test_that("Discrete QW data have the correct number of significant digits", {
   result <- validate::check_that(temp_discqw, 
-                                 nchar( signif(temp_discqw[temp_discqw$CONCENTRATIONN<100000&temp_discqw$CONCENTRATIONN>=10000,"CONCENTRATIONN"]/10000))<=4,
-                                 nchar( signif(temp_discqw[temp_discqw$CONCENTRATIONN<10000&temp_discqw$CONCENTRATIONN>=1000,"CONCENTRATIONN"]/1000))<=4,
-                                 nchar( signif(temp_discqw[temp_discqw$CONCENTRATIONN<1000&temp_discqw$CONCENTRATIONN>=100,"CONCENTRATIONN"]/100))<=4,
-                                 nchar( signif(temp_discqw[temp_discqw$CONCENTRATIONN<100&temp_discqw$CONCENTRATIONN>=10,"CONCENTRATIONN"]/10))<=4,
-                                 nchar( signif(temp_discqw[temp_discqw$CONCENTRATIONN<10&temp_discqw$CONCENTRATIONN>=1,"CONCENTRATIONN"]))<=4,
-                                 nchar( signif(temp_discqw[temp_discqw$CONCENTRATIONN<1&temp_discqw$CONCENTRATIONN>=.1,"CONCENTRATIONN"]*10))<=4,
-                                 nchar( signif(temp_discqw[temp_discqw$CONCENTRATIONN<.1&temp_discqw$CONCENTRATIONN>=.01,"CONCENTRATIONN"]*100))<=4,
-                                 nchar( signif(temp_discqw[temp_discqw$CONCENTRATIONN<.01&temp_discqw$CONCENTRATIONN>=.001,"CONCENTRATIONN"]*1000))<=4,
-                                 nchar( signif(temp_discqw[temp_discqw$CONCENTRATIONN<.001&temp_discqw$CONCENTRATIONN>=.0001,"CONCENTRATIONN"]))<=4
+                                 nchar(sub("^[0]+", "",sub("[.]","",temp_discqw$CONCENTRATION_N/1E4)))<=3
                                  )
   result
   

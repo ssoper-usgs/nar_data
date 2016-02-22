@@ -42,18 +42,8 @@ test_that("annual flow has a reasonable range of values", {
 
 test_that("Flow data have the correct number of significant digits", {
   result <- validate::check_that(aflow, 
-                                 nchar( signif(aflow[aflow$FLOW<1000000000000&aflow$FLOW>=100000000000,"FLOW"]/100000000000))<=4,
-                                 nchar( signif(aflow[aflow$FLOW<100000000000&aflow$FLOW>=10000000000,"FLOW"]/10000000000))<=4,
-                                 nchar( signif(aflow[aflow$FLOW<10000000000&aflow$FLOW>=1000000000,"FLOW"]/1000000000))<=4,
-                                 nchar( signif(aflow[aflow$FLOW<1000000000&aflow$FLOW>=100000000,"FLOW"]/10000000))<=4,
-                                 nchar( signif(aflow[aflow$FLOW<100000000&aflow$FLOW>=10000000,"FLOW"]/10000000))<=4,
-                                 nchar( signif(aflow[aflow$FLOW<10000000&aflow$FLOW>=1000000,"FLOW"]/1000000))<=4,
-                                 nchar( signif(aflow[aflow$FLOW<1000000&aflow$FLOW>=100000,"FLOW"]/100000))<=4,
-                                 nchar( signif(aflow[aflow$FLOW<100000&aflow$FLOW>=10000,"FLOW"]/10000))<=4,
-                                 nchar( signif(aflow[aflow$FLOW<10000&aflow$FLOW>=1000,"FLOW"]/1000))<=4,
-                                 nchar( signif(aflow[aflow$FLOW<1000&aflow$FLOW>=100,"FLOW"]/100))<=4,
-                                 nchar( signif(aflow[aflow$FLOW<100&aflow$FLOW>=10,"FLOW"]/10))<=4,
-                                 nchar( signif(aflow[aflow$FLOW<10&aflow$FLOW>=1,"FLOW"]))<=4
+                                 
+                                 nchar(sub("^[0]+", "",sub("[.]","",aflow$FLOW/1E11)))<=3
                                  
   )
   result
