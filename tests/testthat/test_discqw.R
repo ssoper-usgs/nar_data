@@ -59,6 +59,17 @@ test_that("Discrete QW data have the correct number of significant digits", {
   result <- validate::check_that(temp_discqw, 
                                  nchar(sub("^[0]+", "",sub("[.]","",temp_discqw$CONCENTRATION_N/1E4)))<=3
                                  )
-  result
+  expect_no_errors(result)
+  
+})
+
+
+test_that("There are no duplicate values", {
+  result <- validate::check_that(discqw, 
+                                 length(unique(paste(discqw$SITE_ABB,discqw$CONSTIT,discqw$DATE,sep="_")))==nrow(discqw)  
+                               
+  )
+  
+  expect_no_errors(result)
   
 })

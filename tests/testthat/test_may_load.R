@@ -65,9 +65,7 @@ test_that("may loads for the MISS site are included", {
 
 
 test_that("may loads are less than corresponding annual loads for a given site/water year/constituent", {
- #an earlier option using match is to merge the aloads and temp_mloads data frame is commented out for now.
-   #temp_mloads$aloads<-as.numeric(aloads[match(paste(temp_mloads$SITE_ABB,temp_mloads$WY,temp_mloads$CONSTIT,sep="_"),paste(aloads$SITE_ABB,aloads$WY,aloads$CONSTIT,sep="_")),"TONS"])
-   tt<-left_join(temp_mloads, aloads, by = c("SITE_ABB" = "SITE_ABB", "WY" = "WY","CONSTIT"="CONSTIT"))
+  tt<-left_join(temp_mloads, aloads, by = c("SITE_ABB" = "SITE_ABB", "WY" = "WY","CONSTIT"="CONSTIT"))
      result <- validate::check_that(tt, 
                                  TONS_N < as.numeric(TONS.y)
                              
@@ -103,6 +101,16 @@ test_that("Load data have the correct number of significant digits", {
                                  
                                  )
   
+  expect_no_errors(result)
+})
+
+test_that("There are no duplicate values", {
+  result <- validate::check_that(mloads, 
+                                
+                                 length(unique(paste(mloads$SITE_ABB,mloads$CONSTIT,mloads$MODTYPE,mloads$WY,sep="_")))==nrow(mloads)   
+  )
+  
+  expect_no_errors(result)
   
 })
 

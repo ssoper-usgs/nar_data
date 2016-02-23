@@ -43,8 +43,6 @@ test_that("may flow has a reasonable range of values", {
 })
 
 test_that("may flow is less than corresponding annual flows for a given site/water year", {
-  #an earlier option using match is to merge the aloads and temp_mloads data frame is commented out for now.
-  # temp_mflow$aflow<-aflow[match(paste(temp_mflow$SITE_ABB,temp_mflow$WY,sep="_"),paste(aflow$SITE_ABB,aflow$WY,sep="_")),"FLOW"]
   
   tt<-left_join(temp_mflow, aflow, by = c("SITE_ABB" = "SITE_ABB", "WY" = "WY"))
   
@@ -69,9 +67,21 @@ test_that("Most recent water year has all of the necessary sites ", {
 
 test_that("Flow data have the correct number of significant digits", {
   result <- validate::check_that(mflow, 
-                                 nchar(sub("^[0]+", "",sub("[.]","",mflow$FLOW/1E7)))<=3
+                                 nchar(sub("^[0]+", "",sub("[.]","",abs(mflow$FLOW)/1E7)))<=3
                                  )
   
   
+  expect_no_errors(result)
 })
+
+test_that("There are no duplicate values", {
+  result <- validate::check_that(mflow, 
+                                 
+                                 length(unique(paste(mflow$SITE_ABB,mflow$WY,sep="_")))==nrow(mflow)   
+  )
+  
+  expect_no_errors(result)
+  
+})
+
 

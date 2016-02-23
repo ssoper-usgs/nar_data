@@ -40,12 +40,24 @@ test_that("annual flow has a reasonable range of values", {
 	expect_no_errors(result)
 })
 
+
 test_that("Flow data have the correct number of significant digits", {
   result <- validate::check_that(aflow, 
-                                 
-                                 nchar(sub("^[0]+", "",sub("[.]","",aflow$FLOW/1E11)))<=3
-                                 
+                                 nchar(sub("^[0]+", "",sub("[.]","",aflow$FLOW/1E11))) <= 3
   )
-  result
   
+  expect_no_errors(result)
 })
+
+
+
+test_that("There are no duplicate values", {
+  result <- validate::check_that(aflow, 
+                            
+                            length(unique(paste(aflow$SITE_ABB,aflow$WY,sep="_")))==nrow(aflow)   
+  )
+  
+  expect_no_errors(result)
+
+})
+

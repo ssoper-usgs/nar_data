@@ -81,7 +81,6 @@ expect_no_errors(result)
   
 })
 
-f <- function(x) length(gregexpr("[[:digit:]]", as.character(x))[[1]]) 
 test_that("Load data have the correct number of significant digits", {
   result <- validate::check_that(temp_aloads, 
                                  
@@ -92,5 +91,18 @@ test_that("Load data have the correct number of significant digits", {
                                  nchar(sub("^[0]+", "",sub("[.]","",temp_aloads$YIELD_N/1E8)))<=3
                                  
                                  )
+  expect_no_errors(result) 
+})
+
+test_that("There are no duplicate values", {
+  result <- validate::check_that(aloads, 
+                                
+                                 length(unique(paste(aloads$SITE_ABB,aloads$CONSTIT,aloads$MODTYPE,aloads$WY,sep="_")))==nrow(aloads)   
+  
+                                 )
+  
+  expect_no_errors(result)
   
 })
+
+
