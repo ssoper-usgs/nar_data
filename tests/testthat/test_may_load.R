@@ -1,6 +1,7 @@
 library(testthat)
 library(validate)
 library(dplyr)
+options(scipen=999)
 context("may load")
 
 temp_mloads<-mloads 

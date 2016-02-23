@@ -2,6 +2,7 @@ library(testthat)
 library(validate)
 library(dplyr)
 context("may flow")
+options(scipen=999)
 temp_mflow<-mflow 
 temp_mflow_recent<-mflow[mflow$WY %in% max(mflow$WY),] 
 #looking for more thorough explanation of the 'validate' library capabilities?

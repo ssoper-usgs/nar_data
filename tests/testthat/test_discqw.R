@@ -1,6 +1,7 @@
 library(testthat)
 library(validate)
 context("discrete water quality")
+options(scipen=999)
 head(discqw)
 temp_discqw<-discqw
 temp_discqw$CONCENTRATION_N<-as.numeric(temp_discqw$CONCENTRATION)

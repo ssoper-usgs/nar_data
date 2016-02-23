@@ -1,5 +1,6 @@
 library(testthat)
 library(validate)
+options(scipen=999)
 context("daily flow")
 
 #looking for more thorough explanation of the 'validate' library capabilities?
@@ -49,8 +50,8 @@ test_that("Flow data have the correct number of significant digits", {
                                  nchar(sub("^[0]+", "",sub("[.]","",abs(dflow$FLOW)/1E7)))<=3
                                  
   )
-  
-  expect_no_errors(result)  
+
+expect_no_errors(result)  
 
   })
 

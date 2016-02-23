@@ -1,5 +1,6 @@
 library(testthat)
 library(validate)
+options(scipen=999)
 context("pesticide sample data")
 
 temp_pestsamp<-pestsamp

@@ -1,6 +1,7 @@
 library(testthat)
 library(validate)
 context("annual flow")
+options(scipen=999)
 
 #looking for more thorough explanation of the 'validate' library capabilities?
 #Run:
