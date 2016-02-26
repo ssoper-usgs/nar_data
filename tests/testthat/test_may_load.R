@@ -4,7 +4,7 @@ library(dplyr)
 options(scipen=999)
 context("may load")
 
-temp_mloads <- mloads[]
+temp_mloads <- mloads
 temp_mloads$TONS_N<-as.numeric(temp_mloads$TONS)
 temp_mloads$TONS_L95_N<-as.numeric(temp_mloads$TONS_L95)
 temp_mloads$TONS_U95_N<-as.numeric(temp_mloads$TONS_U95)
