@@ -58,7 +58,7 @@ test_that("may flow is less than corresponding annual flows for a given site/wat
 test_that("Most recent water year has all of the necessary sites ", {
   expected <- sort(c("HAZL","PADU","GRAN","HAST","CLIN","WAPE","KEOS","VALL","GRAF","SIDN","OMAH","ELKH","LOUI","DESO","HERM","THEB","SEDG","HARR","LITT","LONG",
                                                        "STFR","BATO","BELL","MELV","CALU","MORG","VICK","SEWI","SUMN","STTH","ALEX","GULF","NEWH","CANN"))
-  actual <- sort(unique(mflow$SITE_ABB))
+  actual <- sort(unique(temp_mflow_recent$SITE_ABB))
   expect_equal(actual, expected)
 })
 
