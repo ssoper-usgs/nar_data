@@ -15,7 +15,7 @@ expect_no_errors <- function(validation) {
 		expect_true(TRUE)
 	}
 	
-	barplot(validation)
+
 }
 
 # @param dataframe data.frame to check for same columns

@@ -1,6 +1,16 @@
 library(testthat)
 library(validate)
+library(dplyr)
+options(scipen=999)
 context("may load")
+
+temp_mloads<-mloads 
+temp_mloads$TONS_N<-as.numeric(temp_mloads$TONS)
+temp_mloads$TONS_L95_N<-as.numeric(temp_mloads$TONS_L95)
+temp_mloads$TONS_U95_N<-as.numeric(temp_mloads$TONS_U95)
+
+temp_mloads_recent<-temp_mloads[temp_mloads$WY %in% max(temp_mloads$WY),] 
+
 
 #looking for more thorough explanation of the 'validate' library capabilities?
 #Run:
@@ -22,12 +32,11 @@ test_that("may load has the correct columns", {
 
 test_that("may load's columns are correctly typed", {
 	result <- validate::check_that(mloads,
-		is.double(c(TONS, TONS_L95, TONS_U95)),
 		is.integer(c(WY, MONTH)),
 		is.character(c(
 			SITE_ABB,
 			SITE_QW_ID,
-			SITE_FLOW_ID
+			SITE_FLOW_ID,TONS, TONS_L95, TONS_U95
 		)),
 		is.factor(CONSTIT),
 		is.factor(MODTYPE)
@@ -36,12 +45,12 @@ test_that("may load's columns are correctly typed", {
 })
 
 test_that("may load has a reasonable range of values", {
-	result <- validate::check_that(mloads, 
-		TONS > 0,
-		TONS < 5E8,
-		TONS_L95 < TONS_U95,
-		TONS_L95 < TONS,
-		TONS < TONS_U95,
+	result <- validate::check_that(temp_mloads, 
+		TONS_N > 0,
+		TONS_N < 5E8,
+		TONS_L95_N < TONS_U95_N,
+		TONS_L95_N < TONS_N,
+		TONS_N < TONS_U95_N,
 		nchar(SITE_ABB) == 4,
 		WY < 2020,
 		WY > 1950
@@ -53,3 +62,56 @@ test_that("may loads for the MISS site are included", {
 	miss_sites <- subset(mloads, SITE_ABB == 'MISS')
 	expect_gt(nrow(miss_sites), 0)
 })
+
+
+
+test_that("may loads are less than corresponding annual loads for a given site/water year/constituent", {
+  tt<-left_join(temp_mloads, aloads, by = c("SITE_ABB" = "SITE_ABB", "WY" = "WY","CONSTIT"="CONSTIT"))
+     result <- validate::check_that(tt, 
+                                 TONS_N < as.numeric(TONS.y)
+                             
+                                 
+                                 )
+  
+     
+     expect_no_errors(result)
+})
+
+
+
+
+test_that("Most recent water year has all of the necessary sites ", {
+  result <- validate::check_that(temp_mloads_recent, 
+                                 sort(unique(SITE_ABB)) == sort(c("HAZL","PADU","GRAN","HAST","CLIN","WAPE","KEOS","VALL","GRAF","SIDN","OMAH","ELKH","LOUI","DESO","HERM","THEB","SEDG","HARR","LITT","LONG",
+                                                                  "STFR","BATO","BELL","MELV","CALU","MORG","VICK","SEWI","SUMN","STTH","ALEX","GULF","NEWH","CANN","MISS"))
+                                 
+  )
+  
+  expect_no_errors(result)
+
+  })
+
+
+
+test_that("Load data have the correct number of significant digits", {
+  result <- validate::check_that(temp_mloads, 
+                                 
+                                 nchar(sub("^[0]+", "",sub("[.]","",temp_mloads$TONS_N/1E5)))<=3,
+                                 nchar(sub("^[0]+", "",sub("[.]","",temp_mloads$TONS_L95_N/1E5)))<=3,
+                                 nchar(sub("^[0]+", "",sub("[.]","",temp_mloads$TONS_U95_N/1E5)))<=3
+                                 
+                                 )
+  
+  expect_no_errors(result)
+})
+
+test_that("There are no duplicate values", {
+  result <- validate::check_that(mloads, 
+                                
+                                 length(unique(paste(mloads$SITE_ABB,mloads$CONSTIT,mloads$MODTYPE,mloads$WY,sep="_")))==nrow(mloads)   
+  )
+  
+  expect_no_errors(result)
+  
+})
+

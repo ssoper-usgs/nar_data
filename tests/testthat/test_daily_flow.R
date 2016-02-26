@@ -1,5 +1,6 @@
 library(testthat)
 library(validate)
+options(scipen=999)
 context("daily flow")
 
 #looking for more thorough explanation of the 'validate' library capabilities?
@@ -41,3 +42,27 @@ test_that("daily flow has a reasonable range of values", {
 	)
 	expect_no_errors(result)
 })
+
+
+test_that("Flow data have the correct number of significant digits", {
+  result <- validate::check_that(dflow, 
+                                 
+                                 nchar(sub("^[0]+", "",sub("[.]","",abs(dflow$FLOW)/1E7)))<=3
+                                 
+  )
+
+expect_no_errors(result)  
+
+  })
+
+
+test_that("There are no duplicate values", {
+  result <- validate::check_that(dflow, 
+                                 
+                                 length(unique(paste(dflow$SITE_ABB,dflow$DATE,sep="_")))==nrow(dflow)   
+  )
+  
+  expect_no_errors(result)
+  
+})
+

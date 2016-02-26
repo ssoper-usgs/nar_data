@@ -1,6 +1,10 @@
 library(testthat)
 library(validate)
+options(scipen=999)
 context("pesticide sample data")
+
+temp_pestsamp<-pestsamp
+temp_pestsamp$CONCENTRATION_N<-as.numeric(temp_pestsamp$CONCENTRATION)
 
 #looking for more thorough explanation of the 'validate' library capabilities?
 #Run:
@@ -31,12 +35,15 @@ test_that("pesticide sample data has the correct columns", {
 
 test_that("pesticide sample data's columns are correctly typed", {
 	result <- validate::check_that(pestsamp,
-		is.double(c(CONCENTRATION,ACUTE_FISH,ACUTE_INVERT,CHRONIC_FISH,CHRONIC_INVERT,PLANT,HH,HH_CHRONIC,HH_ACUTE,LRL)),
+		is.double(c(ACUTE_FISH,ACUTE_INVERT,CHRONIC_FISH,CHRONIC_INVERT,PLANT,HH,HH_CHRONIC,HH_ACUTE,LRL)),
 		is.integer(WY),
 		is.character(c(
 			PARM_CD,
 			REMARK,
-			SITE_QW_ID,DATETIME,PLANTTYPE
+			SITE_QW_ID,
+			DATETIME,
+			PLANTTYPE,
+			CONCENTRATION
 		)),
 		is.date(DATE),
 		is.factor(CONSTIT)
@@ -44,18 +51,16 @@ test_that("pesticide sample data's columns are correctly typed", {
 	expect_no_errors(result)
 })
 
-test_that("discrete qw data has reasonable range of values", {
-	result <- validate::check_that(pestsamp, 
-		CONCENTRATION > 0,
-		TONS < 1000,
-		LRL<100,
+test_that("pesticide data has reasonable range of values", {
+	result <- validate::check_that(temp_pestsamp, 
+		CONCENTRATION_N > 0,
+LRL<=1,
 		WY < 2020,
 		WY > 1950
 	)
+	
 	expect_no_errors(result)
 })
-
-unique(pestsamp$REMARK)
 
 test_that("pesticide remark data has only blank, less than, greater than, or E values in the remark field", {
   remarks<- sort(levels(pestsamp$REMARK))

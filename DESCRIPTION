@@ -16,6 +16,7 @@ Suggests:
     devtools,
     knitr,
     validate,
+    dplyr,
     rmarkdown
 VignetteBuilder: knitr
 LazyData: true
