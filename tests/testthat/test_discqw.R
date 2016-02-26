@@ -1,7 +1,10 @@
 library(testthat)
 library(validate)
 context("discrete water quality")
-
+options(scipen=999)
+head(discqw)
+temp_discqw<-discqw
+temp_discqw$CONCENTRATION_N<-as.numeric(temp_discqw$CONCENTRATION)
 #looking for more thorough explanation of the 'validate' library capabilities?
 #Run:
 # vignette("intro", package="validate")
@@ -21,12 +24,12 @@ test_that("discqw has the correct columns", {
 
 test_that("discrete qw's columns are correctly typed", {
 	result <- validate::check_that(discqw,
-		is.double(c(CONCENTRATION)),
 		is.integer(WY),
 		is.character(c(
 			SITE_ABB,
 			SITE_QW_ID,
-			SITE_FLOW_ID
+			SITE_FLOW_ID,
+			CONCENTRATION
 		)),
 		is.factor(CONSTIT),
 		is.factor(REMARK),
@@ -37,9 +40,9 @@ test_that("discrete qw's columns are correctly typed", {
 
 
 test_that("discrete qw has a reasonable range of values", {
-	result <- validate::check_that(discqw, 
-		CONCENTRATION >= 0,
-		CONCENTRATION < 100000
+	result <- validate::check_that(temp_discqw, 
+		CONCENTRATION_N >= 0,
+		CONCENTRATION_N < 100000
 	)
 	expect_no_errors(result)
 })
@@ -53,3 +56,21 @@ test_that("discrete qw has only blank or less than values in the remark field", 
 })
 
 
+test_that("Discrete QW data have the correct number of significant digits", {
+  result <- validate::check_that(temp_discqw, 
+                                 nchar(sub("^[0]+", "",sub("[.]","",temp_discqw$CONCENTRATION_N/1E4)))<=3
+                                 )
+  expect_no_errors(result)
+  
+})
+
+
+test_that("There are no duplicate values", {
+  result <- validate::check_that(discqw, 
+                                 length(unique(paste(discqw$SITE_ABB,discqw$CONSTIT,discqw$DATE,sep="_")))==nrow(discqw)  
+                               
+  )
+  
+  expect_no_errors(result)
+  
+})
