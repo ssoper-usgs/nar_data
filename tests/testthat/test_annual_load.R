@@ -2,7 +2,7 @@ library(testthat)
 library(validate)
 context("annual load")
 options(scipen=999)
-temp_aloads<-aloads
+temp_aloads <- aloads[]
 temp_aloads$TONS_N<-as.numeric(temp_aloads$TONS)
 temp_aloads$TONS_L95_N<-as.numeric(temp_aloads$TONS_L95)
 temp_aloads$TONS_U95_N<-as.numeric(temp_aloads$TONS_U95)

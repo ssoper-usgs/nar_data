@@ -3,7 +3,7 @@ library(validate)
 options(scipen=999)
 context("pesticide sample data")
 
-temp_pestsamp<-pestsamp
+temp_pestsamp <- pestsamp[]
 temp_pestsamp$CONCENTRATION_N<-as.numeric(temp_pestsamp$CONCENTRATION)
 
 #looking for more thorough explanation of the 'validate' library capabilities?
