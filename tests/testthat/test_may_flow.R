@@ -56,13 +56,10 @@ test_that("may flow is less than corresponding annual flows for a given site/wat
 })
 
 test_that("Most recent water year has all of the necessary sites ", {
-  result <- validate::check_that(temp_mflow_recent, 
-                            sort(unique(SITE_ABB)) == sort(c("HAZL","PADU","GRAN","HAST","CLIN","WAPE","KEOS","VALL","GRAF","SIDN","OMAH","ELKH","LOUI","DESO","HERM","THEB","SEDG","HARR","LITT","LONG",
+  expected <- sort(c("HAZL","PADU","GRAN","HAST","CLIN","WAPE","KEOS","VALL","GRAF","SIDN","OMAH","ELKH","LOUI","DESO","HERM","THEB","SEDG","HARR","LITT","LONG",
                                                        "STFR","BATO","BELL","MELV","CALU","MORG","VICK","SEWI","SUMN","STTH","ALEX","GULF","NEWH","CANN"))
-                                
-  )
-  
-  expect_no_errors(result)
+  actual <- sort(unique(mflow$SITE_ABB))
+  expect_equal(actual, expected)
 })
 
 
