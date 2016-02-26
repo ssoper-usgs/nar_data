@@ -83,11 +83,11 @@ test_that("the expected modtypes are present", {
 test_that("Load data have the correct number of significant digits", {
   result <- validate::check_that(temp_aloads, 
                                  
-                                 nchar(sub("^[0]+", "",sub("[.]","",temp_aloads$TONS_N/1E8)))<=3,
-                                 nchar(sub("^[0]+", "",sub("[.]","",temp_aloads$TONS_L95_N/1E8)))<=3,
-                                 nchar(sub("^[0]+", "",sub("[.]","",temp_aloads$TONS_U95_N/1E8)))<=3,
-                                 nchar(sub("^[0]+", "",sub("[.]","",temp_aloads$FWC_N/1E8)))<=3,
-                                 nchar(sub("^[0]+", "",sub("[.]","",temp_aloads$YIELD_N/1E8)))<=3
+                                 count_sig_figs(temp_aloads$TONS_N/1E8) <= 3,
+                                 count_sig_figs(temp_aloads$TONS_L95_N/1E8) <= 3,
+                                 count_sig_figs(temp_aloads$TONS_U95_N/1E8) <= 3,
+                                 count_sig_figs(temp_aloads$FWC_N/1E8) <= 3,
+                                 count_sig_figs(temp_aloads$YIELD_N/1E8) <= 3
                                  
                                  )
   expect_no_errors(result) 

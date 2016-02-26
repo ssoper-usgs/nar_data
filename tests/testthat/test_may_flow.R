@@ -65,7 +65,7 @@ test_that("Most recent water year has all of the necessary sites ", {
 
 test_that("Flow data have the correct number of significant digits", {
   result <- validate::check_that(mflow, 
-                                 nchar(sub("^[0]+", "",sub("[.]","",abs(mflow$FLOW)/1E7)))<=3
+                                 count_sig_figs(abs(mflow$FLOW)/1E7)<=3
                                  )
   
   

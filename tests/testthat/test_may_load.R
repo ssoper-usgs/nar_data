@@ -94,9 +94,9 @@ test_that("Most recent water year has all of the necessary sites ", {
 test_that("Load data have the correct number of significant digits", {
   result <- validate::check_that(temp_mloads, 
                                  
-                                 nchar(sub("^[0]+", "",sub("[.]","",temp_mloads$TONS_N/1E5)))<=3,
-                                 nchar(sub("^[0]+", "",sub("[.]","",temp_mloads$TONS_L95_N/1E5)))<=3,
-                                 nchar(sub("^[0]+", "",sub("[.]","",temp_mloads$TONS_U95_N/1E5)))<=3
+                                 count_sig_figs(temp_mloads$TONS_N/1E5) <= 3,
+                                 count_sig_figs(temp_mloads$TONS_L95_N/1E5) <= 3,
+                                 count_sig_figs(temp_mloads$TONS_U95_N/1E5) <= 3
                                  
                                  )
   
