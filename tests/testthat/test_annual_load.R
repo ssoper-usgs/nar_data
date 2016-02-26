@@ -73,12 +73,10 @@ test_that("annual loads for the GULF are included", {
 })
 
 
-test_that("Most recent water year has all of the necessary sites ", {
-  result <- validate::check_that(aloads, 
-                                 sort(unique(MODTYPE)) == sort(c("REG","REG_2","REG_3","REG_4","REG_PRELIM","REGHIST","DAILY","CONTIN","COMP"))
-                                 
-  )
-expect_no_errors(result)
+test_that("the expected modtypes are present", {
+  expected <- sort(c("REG","REG_2","REG_3","REG_4","REG_PRELIM","REGHIST","DAILY","CONTIN","COMP"))
+  actual <- sort(unique(as.character(aloads$MODTYPE)))
+  expect_equal(actual, expected)
   
 })
 
