@@ -19,7 +19,9 @@ write_out_ddl <- function(dataframe_name){
   dataframe <- get(dataframe_name)
   file_name <- paste0(BASE_PATH, dataframe_name, '.sql')
   sink(file=file_name)
+  ddl_prequel(dataframe_name)
   ddl(dataframe)
+  ddl_sequel(dataframe_name)
   sink()
   return(file_name)
 }
@@ -28,7 +30,7 @@ write_out_liquibase <- function(dataframe_name){
   dataframe <- get(dataframe_name)
   file_name <- paste0(BASE_PATH, dataframe_name, '.xml')
   sink(file=file_name)
-  mapresults(dataframe)
+  liquibase(dataframe)
   sink()
   return(file_name)
 }
@@ -52,21 +54,34 @@ write_out_java <- function(dataframe_name) {
   return(file_name)
 }
 
+ddl_prequel <- function(dataframe_name){
+  cat(paste0('--changeset ', Sys.getenv("USERNAME"),':add_', dataframe_name))
+  cat(paste0('\nDROP TABLE ', dataframe_name, ';\n'))
+  cat(paste('\nCREATE TABLE', dataframe_name))
+  cat('\n(\n')
+}
+
+NUMERIC_SIZE <- "22,11"
+
 ddl <- function(df) {
   names <- colnames(df)
   cat('  id serial NOT NULL,\n')
   for (i in 1:ncol(df)) {
     type <- sqltype(df[[i]])
-    size <- sqlsize(df[[i]])
     cat(paste0('  ', tolower(names[i]), ' ', type))
-    if(!is.null(size)) {
-      cat(paste0('(', size, ')'))
+    if(type == 'numeric') {
+      cat(paste0('(', NUMERIC_SIZE, ')'))
     }
     if(i != ncol(df)) {
       cat(',')
     }
     cat('\n')
   }
+}
+
+ddl_sequel <- function(dataframe_name) {
+  cat('\n);\n')
+  cat(paste0('--rollback DROP TABLE ', dataframe_name, ';\n\n'))
 }
 
 liquibase <- function(df) {
@@ -113,21 +128,11 @@ javadeclaration <- function(df) {
 
 sqltype <- function(column) {
   switch(class(column),
-    character="varchar",
+    character="text",
     numeric="numeric",
     integer="integer",
-    factor="varchar",
+    factor="text",
     Date="date"
-  )
-}
-
-sqlsize <- function(column) {
-  switch(class(column),
-    character=2 * max(nchar(unique(column))),
-    numeric="22,11",
-    integer=NULL,
-    factor=2 * max(nchar(unique(as.character(column)))),
-    Date=NULL
   )
 }
 
