@@ -1,11 +1,11 @@
 library(testthat)
 library(validate)
 context("pesticide site summary data")
-test_that
+
 #looking for more thorough explanation of the 'validate' library capabilities?
 #Run:
 # vignette("intro", package="validate")
-test_that
+
 test_that("pesticide sites summary has the correct columns", {
 	expect_has_names(pestsites, c(
 	  "SITE_QW_ID","SITE_QW_NAME","SITE_FLOW_ID","SITE_FLOW_NAME","SITE_ABB","DA","SITE_TYPE","STATE","MIN_SAMP","HERB_SAMP","NONHERB_SAMP","AQ1","AQ2","AQ3",

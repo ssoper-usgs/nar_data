@@ -58,7 +58,7 @@ test_that("discrete qw has only blank or less than values in the remark field", 
 
 test_that("Discrete QW data have the correct number of significant digits", {
   result <- validate::check_that(temp_discqw, 
-                                 nchar(sub("^[0]+", "",sub("[.]","",temp_discqw$CONCENTRATION_N/1E4)))<=3
+                                 count_sig_figs(temp_discqw$CONCENTRATION_N/1E4) <= 3
                                  )
   expect_no_errors(result)
   

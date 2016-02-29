@@ -33,3 +33,9 @@ expect_has_names <- function(dataframe, names) {
 		fail(error_message)
 	}
 }
+
+# @param column - the column whose entries should 
+#        have their significant figures counted
+count_sig_figs <- function(column) {
+	nchar(sub("^[0]+", "",sub("[.]","",column)))
+}

@@ -56,19 +56,16 @@ test_that("may flow is less than corresponding annual flows for a given site/wat
 })
 
 test_that("Most recent water year has all of the necessary sites ", {
-  result <- validate::check_that(temp_mflow_recent, 
-                            sort(unique(SITE_ABB)) == sort(c("HAZL","PADU","GRAN","HAST","CLIN","WAPE","KEOS","VALL","GRAF","SIDN","OMAH","ELKH","LOUI","DESO","HERM","THEB","SEDG","HARR","LITT","LONG",
+  expected <- sort(c("HAZL","PADU","GRAN","HAST","CLIN","WAPE","KEOS","VALL","GRAF","SIDN","OMAH","ELKH","LOUI","DESO","HERM","THEB","SEDG","HARR","LITT","LONG",
                                                        "STFR","BATO","BELL","MELV","CALU","MORG","VICK","SEWI","SUMN","STTH","ALEX","GULF","NEWH","CANN"))
-                                
-  )
-  
-  expect_no_errors(result)
+  actual <- sort(unique(temp_mflow_recent$SITE_ABB))
+  expect_equal(actual, expected)
 })
 
 
 test_that("Flow data have the correct number of significant digits", {
   result <- validate::check_that(mflow, 
-                                 nchar(sub("^[0]+", "",sub("[.]","",abs(mflow$FLOW)/1E7)))<=3
+                                 count_sig_figs(abs(mflow$FLOW)/1E7)<=3
                                  )
   
   

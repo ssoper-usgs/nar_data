@@ -4,7 +4,7 @@ library(dplyr)
 options(scipen=999)
 context("may load")
 
-temp_mloads<-mloads 
+temp_mloads <- mloads
 temp_mloads$TONS_N<-as.numeric(temp_mloads$TONS)
 temp_mloads$TONS_L95_N<-as.numeric(temp_mloads$TONS_L95)
 temp_mloads$TONS_U95_N<-as.numeric(temp_mloads$TONS_U95)
@@ -81,24 +81,22 @@ test_that("may loads are less than corresponding annual loads for a given site/w
 
 
 test_that("Most recent water year has all of the necessary sites ", {
-  result <- validate::check_that(temp_mloads_recent, 
-                                 sort(unique(SITE_ABB)) == sort(c("HAZL","PADU","GRAN","HAST","CLIN","WAPE","KEOS","VALL","GRAF","SIDN","OMAH","ELKH","LOUI","DESO","HERM","THEB","SEDG","HARR","LITT","LONG",
-                                                                  "STFR","BATO","BELL","MELV","CALU","MORG","VICK","SEWI","SUMN","STTH","ALEX","GULF","NEWH","CANN","MISS"))
-                                 
-  )
-  
-  expect_no_errors(result)
 
-  })
+  expected <- sort(c("HAZL","PADU","GRAN","HAST","CLIN","WAPE","KEOS","VALL","GRAF","SIDN","OMAH","ELKH","LOUI","DESO","HERM","THEB","SEDG","HARR","LITT","LONG",
+                                                                  "STFR","BATO","BELL","MELV","CALU","MORG","VICK","SEWI","SUMN","STTH","ALEX","GULF","NEWH","CANN","MISS"))
+  actual <- sort(unique(temp_mloads_recent$SITE_ABB))
+  expect_equal(actual, expected)
+  
+})
 
 
 
 test_that("Load data have the correct number of significant digits", {
   result <- validate::check_that(temp_mloads, 
                                  
-                                 nchar(sub("^[0]+", "",sub("[.]","",temp_mloads$TONS_N/1E5)))<=3,
-                                 nchar(sub("^[0]+", "",sub("[.]","",temp_mloads$TONS_L95_N/1E5)))<=3,
-                                 nchar(sub("^[0]+", "",sub("[.]","",temp_mloads$TONS_U95_N/1E5)))<=3
+                                 count_sig_figs(temp_mloads$TONS_N/1E5) <= 3,
+                                 count_sig_figs(temp_mloads$TONS_L95_N/1E5) <= 3,
+                                 count_sig_figs(temp_mloads$TONS_U95_N/1E5) <= 3
                                  
                                  )
   

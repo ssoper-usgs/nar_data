@@ -47,7 +47,7 @@ test_that("daily flow has a reasonable range of values", {
 test_that("Flow data have the correct number of significant digits", {
   result <- validate::check_that(dflow, 
                                  
-                                 nchar(sub("^[0]+", "",sub("[.]","",abs(dflow$FLOW)/1E7)))<=3
+                                 count_sig_figs(abs(dflow$FLOW)/1E7)<=3
                                  
   )
 
