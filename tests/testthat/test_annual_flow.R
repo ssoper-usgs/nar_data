@@ -44,7 +44,7 @@ test_that("annual flow has a reasonable range of values", {
 
 test_that("Flow data have the correct number of significant digits", {
   result <- validate::check_that(aflow, 
-                                 nchar(aflow$FLOW/1E11) <= 3
+                                 count_sig_figs(aflow$FLOW/1E11) <= 3
   )
   
   expect_no_errors(result)
