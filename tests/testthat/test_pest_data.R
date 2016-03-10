@@ -29,7 +29,8 @@ test_that("pesticide sample data has the correct columns", {
 		"HH",
 		"HH_CHRONIC",
 		"HH_ACUTE",
-		"LRL"
+		"LRL",
+		"METH_CD"
 	))
 })
 
@@ -43,7 +44,8 @@ test_that("pesticide sample data's columns are correctly typed", {
 			SITE_QW_ID,
 			DATETIME,
 			PLANTTYPE,
-			CONCENTRATION
+			CONCENTRATION,
+			METH_CD
 		)),
 		is.date(DATE),
 		is.factor(CONSTIT)
