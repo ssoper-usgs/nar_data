@@ -39,3 +39,4 @@ expect_has_names <- function(dataframe, names) {
 count_sig_figs <- function(column) {
 	nchar(sub("^[0]+", "",sub("[.]","",column)))
 }
+
