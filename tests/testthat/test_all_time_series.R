@@ -1,7 +1,6 @@
 library(validate)
 library(testthat)
 context("all time series")
-setwd("H:/")
 all_time_series_names <- nardata::get_time_series_data_frame_names()
 all_time_series <- Map(get, all_time_series_names)
 
