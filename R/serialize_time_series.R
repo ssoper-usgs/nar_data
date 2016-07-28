@@ -10,12 +10,12 @@ write_out <- function(dataframe_name){
 #'@export
 get_time_series_data_frame_names <- function(){
 	return(list(
-		'discqw',
-		'aloads',
-		'mloads',
 		'aflow',
-		'mflow',
+		'aloads',
 		'dflow',
+		'discqw',
+		'mflow',
+		'mloads',
 		'pest21day',
 		'pest60day',
 		'pestsamp',
