@@ -51,34 +51,22 @@ test_that('there are consistent missing value representations in all time series
 	for_each_data_frame(unlist(all_time_series, recursive = FALSE), expect_consistent_missing_value_representation)
 })
 
-reference_sites <- FALSE
-
-same_sites <- function(name, dataframe) {
-	sites_from_this_data_frame <- sort(unique(dataframe$SITE_QW_ID))
+test_that('the same sites are present in pestsites and pestsamp', {
+	pestsites_sites <- sort(unique(pestsites$SITE_QW_ID))
+	pestsamp_sites <- sort(unique(pestsamp$SITE_QW_ID))
 	
-	#if this is the first time the function has been run
-	if ( identical(reference_sites, FALSE)) {
-		#use the first data frame's sites as the reference sites
-		print(paste("using", length(sites_from_this_data_frame), "sites from dataframe '", name, "' as the reference site list"))
-		reference_sites <<- sites_from_this_data_frame
+	if (setequal(pestsites_sites, pestsamp_sites)) {
+		#register that the test passed
+		succeed()
 	} else {
-		if (setequal(sites_from_this_data_frame, reference_sites)) {
-			#register that the test passed
-			succeed()
-		} else {
-			#if they are not equal, provide helpful information about the differences in the 
-			#error message
-			in_refs_but_not_this_dataframe <- setdiff(reference_sites, sites_from_this_data_frame)
-			in_this_dataframe_but_not_in_refs <- setdiff(sites_from_this_data_frame, reference_sites)
-			message <- paste("The following", length(in_refs_but_not_this_dataframe), "sites were in the reference site list, but not in '", name, "'.")
-			message <- paste(message, "\n", paste(in_refs_but_not_this_dataframe, collapse = ', '), "\n\n")
-			message <- paste(message, "The following", length(in_this_dataframe_but_not_in_refs), "sites were in '", name ,"', but not in the reference sites.")
-			message <- paste(message, "\n", paste(in_this_dataframe_but_not_in_refs, collapse = ', '))
-			fail(message)
-		}
+		#if they are not equal, provide helpful information about the differences in the 
+		#error message
+		in_pestsites_but_not_pestsamp <- setdiff(pestsites_sites, pestsamp_sites)
+		in_pest_samp_but_not_pestsites <- setdiff(pestsamp_sites, pestsites_sites)
+		message <- paste("The following", length(in_pestsites_but_not_pestsamp), "sites were in pestsites but not in pestsamp.")
+		message <- paste(message, "\n", paste(in_pestsites_but_not_pestsamp, collapse = ', '), "\n\n")
+		message <- paste(message, "The following", length(in_pest_samp_but_not_pestsites), "sites were in pestsamp but not in pestsites.")
+		message <- paste(message, "\n", paste(in_pest_samp_but_not_pestsites, collapse = ', '))
+		fail(message)
 	}
-}
-
-test_that('the same sites are present in all time series data frames', {
-	for_each_data_frame(all_time_series, same_sites)
 })
