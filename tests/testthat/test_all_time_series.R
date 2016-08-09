@@ -1,11 +1,7 @@
 library(validate)
 library(testthat)
 context("all time series")
-all_time_series_names <- nardata::get_time_series_data_frame_names()
-all_time_series <- list()
-for (time_series_name in all_time_series_names) {
-	all_time_series[[time_series_name]] <- get(time_series_name)
-}
+all_time_series <- nardata::get_time_series_data_frames_and_names()
 
 expect_at_least_one_site_id_with_a_leading_zero <- function(name, dataframe) {
 	first_char_of_ids <- substr(dataframe$SITE_QW_ID, 1, 1)
@@ -17,19 +13,7 @@ expect_at_least_one_site_id_with_a_leading_zero <- function(name, dataframe) {
 	}
 	
 }
-
-# given a list of dataframe names mapped to data frames, iterate
-# through every one, passing the dataframe name and dataframe to
-# the specified function. The specified function must accept two
-# parameters. The first is a character name. The second is a 
-# data frame.
-
-for_each_data_frame <- function(data_frames, fn) {
-	for(data_frame_name in names(data_frames)) {
-		data_frame <- data_frames[[data_frame_name]]
-		fn(data_frame_name, data_frame)
-	}
-}
+for_each_data_frame <- nardata::for_each_data_frame
 
 test_that('there is at least one site with a leading zero in all the time series data frames', {
 	for_each_data_frame(all_time_series, expect_at_least_one_site_id_with_a_leading_zero)
