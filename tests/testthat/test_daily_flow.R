@@ -66,3 +66,18 @@ test_that("There are no duplicate values", {
   
 })
 
+
+test_that("There are less than 367 daily flow values for any particular site/year", {
+  result <- validate::check_that(dflow, 
+                                 
+                                 table(paste(dflow$SITE_ABB,dflow$WY,sep="_"))<367
+  
+)
+  
+  expect_no_errors(result)
+  
+})
+
+
+
+
