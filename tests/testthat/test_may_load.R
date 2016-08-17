@@ -8,7 +8,8 @@ temp_mloads <- mloads
 temp_mloads$TONS_N<-as.numeric(temp_mloads$TONS)
 temp_mloads$TONS_L95_N<-as.numeric(temp_mloads$TONS_L95)
 temp_mloads$TONS_U95_N<-as.numeric(temp_mloads$TONS_U95)
-temp_mloads$mod1<-temp_mloads$MODTYPE
+
+temp_mloads$mod1<-as.character(temp_mloads$MODTYPE)
 temp_mloads[temp_mloads$mod1%in%"REGHIST","mod1"]<-"REG"
 
 temp_mloads_recent<-temp_mloads[temp_mloads$WY %in% max(temp_mloads$WY),] 
