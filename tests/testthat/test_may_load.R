@@ -108,8 +108,6 @@ test_that("Load data have the correct number of significant digits", {
 
 test_that("There are no duplicate values", {
    mloads_without_ignored_modtypes <- subset(mloads, !(MODTYPE %in% c('COMP', 'CONTIN')))
-   #for purposes of testing the test, insert a duplicate row
-   mloads_without_ignored_modtypes[nrow(mloads_without_ignored_modtypes) + 1,] <- mloads_without_ignored_modtypes[nrow(mloads_without_ignored_modtypes),]
    unique_columns <- mloads_without_ignored_modtypes[c('SITE_QW_ID', 'CONSTIT', 'WY')]
    expect_no_duplicates(unique_columns)
 })
