@@ -111,8 +111,11 @@ test_that("There are no duplicate values", {
    duplicates <- unique_columns[duplicated(unique_columns),]
    if(nrow(duplicates) > 0) {
        str_duplicates <- capture.output(duplicates)
-       flat_str_duplicates <- paste(str_duplicates, "\n", sep = "")
-       fail(flat_str_duplicates)
+       flat_str_duplicates <- paste(str_duplicates, "\n", sep = "", collapse="\n")
+       flat_str_duplicates
+       error_message <- paste("Duplicate rows were detected that share the following values:", flat_str_duplicates, sep="\n")
+       error_message
+       fail(error_message)
        
    } else {
        succeed()
