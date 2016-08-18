@@ -11,6 +11,7 @@ temp_mloads$TONS_U95_N<-as.numeric(temp_mloads$TONS_U95)
 
 temp_mloads$mod1<-as.character(temp_mloads$MODTYPE)
 temp_mloads[temp_mloads$mod1%in%"REGHIST","mod1"]<-"REG"
+temp_mloads$un<-paste(temp_mloads$SITE_ABB,temp_mloads$CONSTIT,temp_mloads$mod1,temp_mloads$WY,sep="_")
 
 temp_mloads_recent<-temp_mloads[temp_mloads$WY %in% max(temp_mloads$WY),] 
 
@@ -108,10 +109,10 @@ test_that("Load data have the correct number of significant digits", {
 test_that("There are no duplicate values", {
   result <- validate::check_that(temp_mloads, 
                                 
-                                 length(unique(paste(temp_mloads$SITE_ABB,temp_mloads$CONSTIT,temp_mloads$mod1,temp_mloads$WY,sep="_")))==nrow(temp_mloads)   
+                                 nrow(temp_mloads[duplicated(temp_mloads$un),])<1
   )
-  
+
   expect_no_errors(result)
+  rbind(temp_mloads[duplicated(temp_mloads$un,fromLast = T),],temp_mloads[duplicated(temp_mloads$un,fromLast = F),])
   
 })
-
