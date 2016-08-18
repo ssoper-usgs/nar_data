@@ -105,12 +105,18 @@ test_that("Load data have the correct number of significant digits", {
 })
 
 test_that("There are no duplicate values", {
-  result <- validate::check_that(temp_mloads, 
-                                
-                                 length(unique(paste(temp_mloads$SITE_ABB,temp_mloads$CONSTIT,temp_mloads$mod1,temp_mloads$WY,sep="_")))==nrow(temp_mloads)   
-  )
-  
-  expect_no_errors(result)
-  
+
+   mloads_without_ignored_modtypes <- subset(mloads, !(MODTYPE %in% c('COMP', 'CONTIN')))
+   unique_columns <- mloads_without_ignored_modtypes[c('SITE_QW_ID', 'CONSTIT', 'WY')]
+   duplicates <- unique_columns[duplicated(unique_columns),]
+   if(nrow(duplicates) > 0) {
+       str_duplicates <- capture.output(duplicates)
+       flat_str_duplicates <- paste(str_duplicates, "\n", sep = "")
+       fail(flat_str_duplicates)
+       
+   } else {
+       succeed()
+   }
+
 })
 
