@@ -108,16 +108,8 @@ test_that("Load data have the correct number of significant digits", {
 
 test_that("There are no duplicate values", {
    mloads_without_ignored_modtypes <- subset(mloads, !(MODTYPE %in% c('COMP', 'CONTIN')))
+   #for purposes of testing the test, insert a duplicate row
+   mloads_without_ignored_modtypes[nrow(mloads_without_ignored_modtypes) + 1,] <- mloads_without_ignored_modtypes[nrow(mloads_without_ignored_modtypes),]
    unique_columns <- mloads_without_ignored_modtypes[c('SITE_QW_ID', 'CONSTIT', 'WY')]
-   duplicates <- unique_columns[duplicated(unique_columns),]
-   if (nrow(duplicates) > 0) {
-       # prepare a helpful error message that starts with a descriptive summary and ends with
-   	   # R's handy native representation of the data frame containing duplicates.
-       str_duplicates <- capture.output(duplicates)
-       flat_str_duplicates <- paste(str_duplicates, "\n", sep = "", collapse = "\n")
-       error_message <- paste("Duplicate rows were detected that share the following values:", flat_str_duplicates, sep = "\n")
-       fail(error_message)
-   } else {
-       succeed()
-   }
+   expect_no_duplicates(unique_columns)
 })
