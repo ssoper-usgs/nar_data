@@ -8,7 +8,7 @@ temp_aloads$TONS_L95_N<-as.numeric(temp_aloads$TONS_L95)
 temp_aloads$TONS_U95_N<-as.numeric(temp_aloads$TONS_U95)
 temp_aloads$FWC_N<-as.numeric(temp_aloads$FWC)
 temp_aloads$YIELD_N<-as.numeric(temp_aloads$YIELD)
-temp_aloads$mod1<-temp_aloads$MODTYPE
+temp_aloads$mod1<-as.character(temp_aloads$MODTYPE)
 temp_aloads[temp_aloads$mod1%in%"REGHIST","mod1"]<-"REG"
 
 #looking for more thorough explanation of the 'validate' library capabilities?
