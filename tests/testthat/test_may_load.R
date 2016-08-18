@@ -115,9 +115,7 @@ test_that("There are no duplicate values", {
    	   # R's handy native representation of the data frame containing duplicates.
        str_duplicates <- capture.output(duplicates)
        flat_str_duplicates <- paste(str_duplicates, "\n", sep = "", collapse = "\n")
-       flat_str_duplicates
        error_message <- paste("Duplicate rows were detected that share the following values:", flat_str_duplicates, sep = "\n")
-       error_message
        fail(error_message)
    } else {
        succeed()
