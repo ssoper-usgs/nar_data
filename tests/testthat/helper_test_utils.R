@@ -39,3 +39,23 @@ expect_has_names <- function(dataframe, names) {
 count_sig_figs <- function(column) {
 	nchar(sub("^[0]+", "",sub("[.]","",column)))
 }
+
+#' Expect No Duplicates
+#' 
+#' Detects duplicates and provides helpful feedback
+#' 
+#' @param dataframe data.frame to examine for duplicates. The dataframe should already be subset to columns that should uniquely key the data
+#' 
+expect_no_duplicates <- function(dataframe) {
+	   duplicates <- dataframe[duplicated(dataframe),]
+   if (nrow(duplicates) > 0) {
+       # prepare a helpful error message that starts with a descriptive summary and ends with
+   	   # R's handy native representation of the data frame containing duplicates.
+       str_duplicates <- capture.output(duplicates)
+       flat_str_duplicates <- paste(str_duplicates, "\n", sep = "", collapse = "\n")
+       error_message <- paste("Duplicate rows were detected that share the following values:", flat_str_duplicates, sep = "\n")
+       fail(error_message)
+   } else {
+       succeed()
+   }
+}
