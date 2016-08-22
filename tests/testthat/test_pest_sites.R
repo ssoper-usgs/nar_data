@@ -43,3 +43,19 @@ test_that("pesticide site's columns are correctly typed", {
 	
 	expect_no_errors(result)
 })
+
+test_that("All pestsites have a pesticide selected for aquatic-life and human-health benchmarks", {
+ pest_test <- pestsites[is.na(pestsites$AQ1)|is.na(pestsites$HH1),]
+  expect_equal(nrow(pest_test), 0)
+})
+
+
+
+test_that("The exact same sites in pestsites are also in pestdata and vice-versa", {
+  
+  pest_test <- pestsites[is.na(pestsites$AQ1)|is.na(pestsites$HH1),]
+  expect_equal(nrow(pestsites[pestsites$SITE_QW_ID%in%unique(pestsamp$SITE_QW_ID)]), nrow(pestsites))
+  expect_equal(length(unique(pestsamp[pestsamp$SITE_QW_ID%in%pestsites$SITE_QW_ID,"SITE_QW_ID"])),length(unique(pestsamp$SITE_QW_ID)))
+  
+  
+  })
