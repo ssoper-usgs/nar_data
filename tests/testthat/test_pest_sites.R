@@ -43,3 +43,9 @@ test_that("pesticide site's columns are correctly typed", {
 	
 	expect_no_errors(result)
 })
+
+test_that("All pestsites have a pesticide selected for aquatic-life and human-health benchmarks", {
+ pest_test <- pestsites[is.na(pestsites$AQ1)|is.na(pestsites$HH1),]
+  expect_equal(nrow(pest_test), 0)
+})
+
