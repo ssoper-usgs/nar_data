@@ -34,6 +34,16 @@ test_that("pesticide sample data has the correct columns", {
 	))
 })
 
+
+test_that("Pesticide data have the correct number of significant digits", {
+  result <- validate::check_that(pestsamp, 
+                                 
+                                 count_sig_figs(pestsamp$CONCENTRATION) <= 4
+                                 
+  )
+  expect_no_errors(result) 
+})
+
 test_that("pesticide sample data's columns are correctly typed", {
 	result <- validate::check_that(pestsamp,
 		is.double(c(ACUTE_FISH,ACUTE_INVERT,CHRONIC_FISH,CHRONIC_INVERT,PLANT,HH,HH_CHRONIC,HH_ACUTE,LRL)),

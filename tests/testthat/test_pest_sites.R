@@ -49,3 +49,12 @@ test_that("All pestsites have a pesticide selected for aquatic-life and human-he
   expect_equal(nrow(pest_test), 0)
 })
 
+
+test_that("Pesticide percentage and names have ", {
+  pest_test1 <- pestsites[is.na(pestsites$PERC_HH)|is.na(pestsites$PERC_AQ)|is.na(pestsites$PERC_HH3)|is.na(pestsites$PERC_AQ3)|is.na(pestsites$PERC_HH_OLD)|is.na(pestsites$PERC_AQ_OLD)|is.na(pestsites$N_NEW)
+                         |is.na(pestsites$NPEST_NEW_HH)|is.na(pestsites$N_3)|is.na(pestsites$NPEST_3_HH)|is.na(pestsites$N_OLD_AVE)|is.na(pestsites$N_YRS)|is.na(pestsites$N_OLD_HH)|is.na(pestsites$N_NEW_AQ)
+                         |is.na(pestsites$NPEST_3_AQ)|is.na(pestsites$N_OLD_AQ)|is.na(pestsites$N_HH_OLD)|is.na(pestsites$N_AQ_OLD)|is.na(pestsites$PEST_NEW_EXCEED_HH)|is.na(pestsites$PEST_NEW_EXCEED_AQ)
+                         |is.na(pestsites$PEST_3_EXCEED_HH)|is.na(pestsites$PEST_3_EXCEED_AQ)|is.na(pestsites$PEST_OLD_EXCEED_HH)|is.na(pestsites$PEST_OLD_EXCEED_AQ),]
+  expect_equal(nrow(pest_test1), 0)
+
+})
