@@ -1,5 +1,6 @@
 library(validate)
 library(testthat)
+library(dplyr)
 
 # Determines whether the validation has errors. If it does, create a helpful 
 # failure message and fail the present test.
