@@ -54,3 +54,59 @@ test_that('the same sites are present in pestsites and pestsamp', {
 		fail(message)
 	}
 })
+
+test_that('site abbreviations correspond to only one water quality site id', {
+	message <- ''
+	success <- TRUE
+	required_columns <- c('SITE_ABB', 'SITE_QW_ID')
+	for_each_data_frame(data_frames=get_time_series_data_frames_and_names(), function(name, dataframe){
+		if(all(required_columns %in% names(dataframe))){
+			problematic_matches <- dataframe %>% distinct(SITE_ABB, SITE_QW_ID) %>% group_by(SITE_ABB) %>% filter(n()>1) %>% arrange(SITE_ABB)
+			if(nrow(problematic_matches) > 0){
+				success <<- FALSE
+				
+				# R's handy native representation of the data frame
+				str_problematic_matches <- capture.output(problematic_matches)
+				flat_str_problematic_matches <- paste(str_problematic_matches, "\n", sep = "", collapse = "\n")
+				
+				message <<- paste(message, "\n" ,"The dataframe '", name, 
+								 "' had the following site abbreviations that corresponded to more than one water quality site id",
+								 "\n", flat_str_problematic_matches
+				)
+			}
+		}
+	})
+	if(success){
+		succeed()	
+	} else {
+		fail(message)
+	}
+})
+
+test_that('water quality site ids correspond to only one site abbreviation', {
+	message <- ''
+	success <- TRUE
+	required_columns <- c('SITE_ABB', 'SITE_QW_ID')
+	for_each_data_frame(data_frames=get_time_series_data_frames_and_names(), function(name, dataframe){
+		if(all(required_columns %in% names(dataframe))){
+			problematic_matches <- dataframe %>% distinct(SITE_QW_ID, SITE_ABB) %>% group_by(SITE_QW_ID) %>% filter(n()>1) %>% arrange(SITE_QW_ID)
+			if(nrow(problematic_matches) > 0){
+				success <<- FALSE
+				
+				# R's handy native representation of the data frame
+				str_problematic_matches <- capture.output(problematic_matches)
+				flat_str_problematic_matches <- paste(str_problematic_matches, "\n", sep = "", collapse = "\n")
+				
+				message <<- paste(message, "\n" ,"The dataframe '", name, 
+								  "' had the following water quality site ids that corresponded to more than one site abbreviations",
+								  "\n", flat_str_problematic_matches
+				)
+			}
+		}
+	})
+	if(success){
+		succeed()	
+	} else {
+		fail(message)
+	}
+})
