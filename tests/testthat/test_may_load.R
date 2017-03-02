@@ -11,7 +11,7 @@ temp_mloads$TONS_U95_N<-as.numeric(temp_mloads$TONS_U95)
 
 temp_mloads$mod1<-as.character(temp_mloads$MODTYPE)
 temp_mloads[temp_mloads$mod1%in%"REGHIST","mod1"]<-"REG"
-temp_mloads$un<-paste(temp_mloads$SITE_ABB,temp_mloads$CONSTIT,temp_mloads$mod1,temp_mloads$WY,sep="_")
+temp_mloads$un<-paste(temp_mloads$SITE_QW_ID,temp_mloads$CONSTIT,temp_mloads$mod1,temp_mloads$WY,sep="_")
 
 temp_mloads_recent<-temp_mloads[temp_mloads$WY %in% max(temp_mloads$WY),] 
 
@@ -113,6 +113,5 @@ test_that("There are no duplicate values", {
   )
 
   expect_no_errors(result)
-  rbind(temp_mloads[duplicated(temp_mloads$un,fromLast = T),],temp_mloads[duplicated(temp_mloads$un,fromLast = F),])
   
 })
