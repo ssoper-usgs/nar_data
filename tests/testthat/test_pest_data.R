@@ -38,7 +38,7 @@ test_that("pesticide sample data has the correct columns", {
 test_that("Pesticide data have the correct number of significant digits", {
   result <- validate::check_that(pestsamp, 
                                  
-                                 count_sig_figs(pestsamp$CONCENTRATION) <= 4
+                                 count_sig_figs(CONCENTRATION) <= 4
                                  
   )
   expect_no_errors(result) 
