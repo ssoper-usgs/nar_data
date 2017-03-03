@@ -49,3 +49,13 @@ test_that("All pestsites have a pesticide selected for aquatic-life and human-he
   expect_equal(nrow(pest_test), 0)
 })
 
+
+test_that("Pesticide percentage and names are not NA values", {
+  result <- validate::check_that(pestsites, 
+                                 !is.na(c(PERC_HH,PERC_AQ,PERC_HH3,PERC_AQ3,PERC_HH_OLD,PERC_AQ_OLD,N_NEW,
+                                          NPEST_NEW_HH,N_3,NPEST_3_HH,N_OLD_AVE,N_YRS,N_OLD_HH,N_NEW_AQ,
+                                          NPEST_3_AQ,N_OLD_AQ,N_HH_OLD,N_AQ_OLD,PEST_NEW_EXCEED_HH,PEST_NEW_EXCEED_AQ,
+                                          PEST_3_EXCEED_HH,PEST_3_EXCEED_AQ,PEST_OLD_EXCEED_HH,PEST_OLD_EXCEED_AQ))
+  )
+  expect_no_errors(result)
+})

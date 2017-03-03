@@ -9,9 +9,6 @@ temp_mloads$TONS_N<-as.numeric(temp_mloads$TONS)
 temp_mloads$TONS_L95_N<-as.numeric(temp_mloads$TONS_L95)
 temp_mloads$TONS_U95_N<-as.numeric(temp_mloads$TONS_U95)
 
-temp_mloads$mod1<-as.character(temp_mloads$MODTYPE)
-temp_mloads[temp_mloads$mod1%in%"REGHIST","mod1"]<-"REG"
-temp_mloads$un<-paste(temp_mloads$SITE_ABB,temp_mloads$CONSTIT,temp_mloads$mod1,temp_mloads$WY,sep="_")
 
 temp_mloads_recent<-temp_mloads[temp_mloads$WY %in% max(temp_mloads$WY),] 
 
@@ -106,8 +103,11 @@ test_that("Load data have the correct number of significant digits", {
   expect_no_errors(result)
 })
 
+
 test_that("There are no duplicate values", {
-   mloads_without_ignored_modtypes <- subset(mloads, !(MODTYPE %in% c('COMP', 'CONTIN')))
-   unique_columns <- mloads_without_ignored_modtypes[c('SITE_QW_ID', 'CONSTIT', 'WY')]
-   expect_no_duplicates(unique_columns)
+  mloads_without_ignored_modtypes <- subset(temp_mloads, !(MODTYPE %in% c('COMP', 'CONTIN')))
+  unique_columns <- mloads_without_ignored_modtypes[c('SITE_QW_ID', 'CONSTIT', 'WY')]
+  expect_no_duplicates(unique_columns)
+  
 })
+
