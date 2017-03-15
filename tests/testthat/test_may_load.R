@@ -8,8 +8,7 @@ temp_mloads <- mloads
 temp_mloads$TONS_N<-as.numeric(temp_mloads$TONS)
 temp_mloads$TONS_L95_N<-as.numeric(temp_mloads$TONS_L95)
 temp_mloads$TONS_U95_N<-as.numeric(temp_mloads$TONS_U95)
-temp_mloads$mod1<-temp_mloads$MODTYPE
-temp_mloads[temp_mloads$mod1%in%"REGHIST","mod1"]<-"REG"
+
 
 temp_mloads_recent<-temp_mloads[temp_mloads$WY %in% max(temp_mloads$WY),] 
 
@@ -104,22 +103,11 @@ test_that("Load data have the correct number of significant digits", {
   expect_no_errors(result)
 })
 
+
 test_that("There are no duplicate values", {
-
-   mloads_without_ignored_modtypes <- subset(mloads, !(MODTYPE %in% c('COMP', 'CONTIN')))
-   unique_columns <- mloads_without_ignored_modtypes[c('SITE_QW_ID', 'CONSTIT', 'WY')]
-   duplicates <- unique_columns[duplicated(unique_columns),]
-   if(nrow(duplicates) > 0) {
-       str_duplicates <- capture.output(duplicates)
-       flat_str_duplicates <- paste(str_duplicates, "\n", sep = "", collapse="\n")
-       flat_str_duplicates
-       error_message <- paste("Duplicate rows were detected that share the following values:", flat_str_duplicates, sep="\n")
-       error_message
-       fail(error_message)
-       
-   } else {
-       succeed()
-   }
-
+  mloads_without_ignored_modtypes <- subset(temp_mloads, !(MODTYPE %in% c('COMP', 'CONTIN')))
+  unique_columns <- mloads_without_ignored_modtypes[c('SITE_QW_ID', 'CONSTIT', 'WY')]
+  expect_no_duplicates(unique_columns)
+  
 })
 
