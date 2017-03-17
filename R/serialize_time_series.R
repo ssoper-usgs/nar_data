@@ -115,8 +115,8 @@ has_site_id_column <- function(frame){
   "SITE_QW_ID" %in% names(frame)
 }
 
-#' Get a list of all unique site ids in a list of data frames. 
-#' Silenty ignores any data frames that do not have the expected column name
+#' Given a list of data frames, get a list of all unique site ids.
+#' Silenty ignores any data frames that do not have the expected site id column name
 #' @param data_frames a list of data frames
 #' @return vector of unique character site ids
 #' @export
@@ -140,7 +140,7 @@ get_site_ids <- function(data_frames){
   return(unique_sites)
 }
 
-#' Get a list of all unique site ids in all data frames
+#' Get a list of all unique site ids across all the time series data frames
 #' @return vector of unique character site ids
 #' @export
 get_all_site_ids <- function(){
