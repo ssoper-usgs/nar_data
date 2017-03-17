@@ -102,3 +102,47 @@ serialize_specific_time_series <- function(time_series_data_frames_and_names, ba
 	})
 	return(files_written)
 }
+
+get_unique_sites_from_data_frame <- function(frame){
+  unique(frame$SITE_QW_ID)
+}
+
+concatenate_unique_site_ids <- function(allIds, idsFromThisFrame){
+  unique(c(idsFromThisFrame, allIds))
+}
+
+has_site_id_column <- function(frame){
+  "SITE_QW_ID" %in% names(frame)
+}
+
+#' Get a list of all unique site ids in a list of data frames. 
+#' Silenty ignores any data frames that do not have the expected column name
+#' @param data_frames a list of data frames
+#' @return vector of unique character site ids
+#' @export
+get_site_ids <- function(data_frames){
+  data_frames_with_site_id_columns <- Filter(
+    has_site_id_column,
+    data_frames
+  )
+  
+  sites_from_each_data_frame <- Map(
+    get_unique_sites_from_data_frame,
+    data_frames_with_site_id_columns
+  )
+  
+  unique_sites <- Reduce(
+    concatenate_unique_site_ids, 
+    sites_from_each_data_frame,
+    c()
+  )
+  
+  return(unique_sites)
+}
+
+#' Get a list of all unique site ids in all data frames
+#' @return vector of unique character site ids
+#' @export
+get_all_site_ids <- function(){
+  get_site_ids(get_time_series_data_frames_and_names())
+}
