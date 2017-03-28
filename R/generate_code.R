@@ -8,6 +8,7 @@
 #'
 #'@importFrom R.utils toCamelCase
 #'@export
+library(R.utils)
 generate_code <- function(){
   lapply(get_time_series_data_frame_names(), write_out_ddl)
   lapply(get_time_series_data_frame_names(), write_out_liquibase)
@@ -30,7 +31,7 @@ write_out_liquibase <- function(dataframe_name){
   dataframe <- get(dataframe_name)
   file_name <- paste0(BASE_PATH, dataframe_name, '.xml')
   sink(file=file_name)
-  liquibase(dataframe)
+  liquibase(dataframe, dataframe_name)
   sink()
   return(file_name)
 }
@@ -84,16 +85,26 @@ ddl_sequel <- function(dataframe_name) {
   cat(paste0('--rollback DROP TABLE ', dataframe_name, ';\n\n'))
 }
 
-liquibase <- function(df) {
+liquibase <- function(df, dataframe_name) {
+  table_name <- tolower(dataframe_name)
   names <- colnames(df)
-  cat('\t\t\t<column name="rownum" header="" type="skip" />\n')
+  cat(paste0('\t\t<delete tableName="', table_name, '" />\n'))
+  cat('\t\t<sql dbms="postgresql">\n')
+  cat(paste0('\t\t\tCOPY ', table_name, '(\n'))
   for (i in 1:ncol(df)) {
-    type <- liquibasetype(df[[i]])
-    column <- paste0('\t\t\t<column name="', tolower(names[i]), '" ')
-    column <- paste0(column, 'header="', names[i], '" ')
-    column <- paste0(column, 'type="', type, '" />\n')
-    cat(column)
+    cat('\t\t\t\t')
+    cat(tolower(names[i]))
+    if(i != ncol(df)){
+      cat(',\n')
+    }
   }
+  cat('\n\t\t\t) FROM \'${nar.data.location}/')
+  cat(table_name)
+  cat('.csv\' DELIMITER \',\' CSV HEADER NULL \'NULL\';\n')
+  cat('\t\t</sql>\n')
+  cat('\t\t<rollback>delete from ')
+  cat(table_name)
+  cat('</rollback>\n')
 }
 
 mapresults <- function(df) {
