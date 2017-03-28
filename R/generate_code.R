@@ -85,12 +85,30 @@ ddl_sequel <- function(dataframe_name) {
   cat(paste0('--rollback DROP TABLE ', dataframe_name, ';\n\n'))
 }
 
+#' Writes out liquibase changesets for loading data into a table from csv.
+#' Example output for a dataframe named 'aflow':
+#' 
+#' <delete tableName="aflow" />
+#' <sql dbms="postgresql">
+#'  COPY aflow(
+#'    site_abb,
+#'    site_qw_id,
+#'    site_flow_id,
+#'    wy,
+#'    flow
+#' ) FROM '${nar.data.location}/aflow.csv' DELIMITER ',' CSV HEADER NULL 'NULL';
+#' </sql>
+#' <rollback>delete from aflow</rollback>
 liquibase <- function(df, dataframe_name) {
   table_name <- tolower(dataframe_name)
   names <- colnames(df)
-  cat(paste0('\t\t<delete tableName="', table_name, '" />\n'))
-  cat('\t\t<sql dbms="postgresql">\n')
-  cat(paste0('\t\t\tCOPY ', table_name, '(\n'))
+  cat(paste0(
+    '\t\t<delete tableName="', table_name, '" />\n',
+    '\t\t<sql dbms="postgresql">\n',
+      '\t\t\tCOPY ', table_name, '(\n'
+    )
+  )
+  
   for (i in 1:ncol(df)) {
     cat('\t\t\t\t')
     cat(tolower(names[i]))
@@ -98,13 +116,14 @@ liquibase <- function(df, dataframe_name) {
       cat(',\n')
     }
   }
-  cat('\n\t\t\t) FROM \'${nar.data.location}/')
-  cat(table_name)
-  cat('.csv\' DELIMITER \',\' CSV HEADER NULL \'NULL\';\n')
-  cat('\t\t</sql>\n')
-  cat('\t\t<rollback>delete from ')
-  cat(table_name)
-  cat('</rollback>\n')
+  
+  cat(paste0(
+    "\n\t\t\t) FROM '${nar.data.location}/", table_name, ".csv' DELIMITER ',' CSV HEADER NULL 'NULL';\n",
+    '\t\t</sql>\n'
+  ))
+  cat(paste0(
+    '\t\t<rollback>delete from ', table_name, '</rollback>\n'
+  ))
 }
 
 mapresults <- function(df) {
