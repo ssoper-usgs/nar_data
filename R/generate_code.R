@@ -8,7 +8,6 @@
 #'
 #'@importFrom R.utils toCamelCase
 #'@export
-library(R.utils)
 generate_code <- function(){
   lapply(get_time_series_data_frame_names(), write_out_ddl)
   lapply(get_time_series_data_frame_names(), write_out_liquibase)
@@ -31,7 +30,7 @@ write_out_liquibase <- function(dataframe_name){
   dataframe <- get(dataframe_name)
   file_name <- paste0(BASE_PATH, dataframe_name, '.xml')
   sink(file=file_name)
-  liquibase(dataframe, dataframe_name)
+  liquibase(dataframe)
   sink()
   return(file_name)
 }
@@ -85,45 +84,16 @@ ddl_sequel <- function(dataframe_name) {
   cat(paste0('--rollback DROP TABLE ', dataframe_name, ';\n\n'))
 }
 
-#' Writes out liquibase changesets for loading data into a table from csv.
-#' Example output for a dataframe named 'aflow':
-#' 
-#' <delete tableName="aflow" />
-#' <sql dbms="postgresql">
-#'  COPY aflow(
-#'    site_abb,
-#'    site_qw_id,
-#'    site_flow_id,
-#'    wy,
-#'    flow
-#' ) FROM '${nar.data.location}/aflow.csv' DELIMITER ',' CSV HEADER NULL 'NULL';
-#' </sql>
-#' <rollback>delete from aflow</rollback>
-liquibase <- function(df, dataframe_name) {
-  table_name <- tolower(dataframe_name)
+liquibase <- function(df) {
   names <- colnames(df)
-  cat(paste0(
-    '\t\t<delete tableName="', table_name, '" />\n',
-    '\t\t<sql dbms="postgresql">\n',
-      '\t\t\tCOPY ', table_name, '(\n'
-    )
-  )
-  
+  cat('\t\t\t<column name="rownum" header="" type="skip" />\n')
   for (i in 1:ncol(df)) {
-    cat('\t\t\t\t')
-    cat(tolower(names[i]))
-    if(i != ncol(df)){
-      cat(',\n')
-    }
+    type <- liquibasetype(df[[i]])
+    column <- paste0('\t\t\t<column name="', tolower(names[i]), '" ')
+    column <- paste0(column, 'header="', names[i], '" ')
+    column <- paste0(column, 'type="', type, '" />\n')
+    cat(column)
   }
-  
-  cat(paste0(
-    "\n\t\t\t) FROM '${nar.data.location}/", table_name, ".csv' DELIMITER ',' CSV HEADER NULL 'NULL';\n",
-    '\t\t</sql>\n'
-  ))
-  cat(paste0(
-    '\t\t<rollback>delete from ', table_name, '</rollback>\n'
-  ))
 }
 
 mapresults <- function(df) {

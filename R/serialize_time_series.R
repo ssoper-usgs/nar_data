@@ -13,7 +13,7 @@ EXTENSION <- '.csv'
 #' @return the name of the file
 write_out <- function(dataframe_name, dataframe, base_path, extension){
 	file_name <- paste(base_path, dataframe_name, extension, sep = "")
-	write.csv(dataframe, file_name, quote = TRUE, na = "NULL", row.names=FALSE)
+	write.csv(dataframe, file_name, quote = TRUE, na = "NULL")
 	return(file_name);
 }
 
