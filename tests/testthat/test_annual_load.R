@@ -46,6 +46,10 @@ test_that("annual load's columns are correctly typed", {
 	expect_no_errors(result)
 })
 
+temp_aloads[temp_aloads$TONS_N<=temp_aloads$TONS_L95_N,]
+temp_aloads[temp_aloads$TONS_N>=temp_aloads$TONS_U95_N,]
+
+#temp_aloads[is.na(temp_aloads$WY),]
 
 test_that("annual load has a reasonable range of values", {
 	result <- validate::check_that(temp_aloads, 
