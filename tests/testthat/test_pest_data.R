@@ -66,7 +66,7 @@ test_that("pesticide sample data's columns are correctly typed", {
 test_that("pesticide data has reasonable range of values", {
 	result <- validate::check_that(temp_pestsamp, 
 		CONCENTRATION_N > 0,
-LRL<=1,
+LRL<=3,
 		WY < 2020,
 		WY > 1950
 	)

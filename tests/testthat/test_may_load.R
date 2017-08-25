@@ -67,23 +67,21 @@ test_that("may loads for the MISS site are included", {
 
 test_that("may loads are less than corresponding annual loads for a given site/water year/constituent", {
   tt<-left_join(temp_mloads, aloads, by = c("SITE_ABB" = "SITE_ABB", "WY" = "WY","CONSTIT"="CONSTIT"))
-     result <- validate::check_that(tt, 
+  tt<-tt[!is.na(tt$TONS.y),]
+  result <- validate::check_that(tt, 
                                  TONS_N < as.numeric(TONS.y)
                              
                                  
                                  )
-  
-     
      expect_no_errors(result)
 })
 
 
 
-
 test_that("Most recent water year has all of the necessary sites ", {
 
-  expected <- sort(c("HAZL","PADU","GRAN","HAST","CLIN","WAPE","KEOS","VALL","GRAF","SIDN","OMAH","ELKH","LOUI","DESO","HERM","THEB","SEDG","HARR","LITT","LONG","KERS",
-                                                                  "STFR","BATO","BELL","MELV","CALU","MORG","VICK","SUMN","STTH","ALEX","GULF","NEWH","CANN","MISS"))
+  expected <- sort(c("HAZL","PADU","GRAN","CLIN","WAPE","KEOS","VALL","GRAF","SIDN","OMAH","ELKH","LOUI","DESO","HERM","THEB","SEDG","HARR","LITT","KERS",
+                                                                  "STFR","BATO","BELL","MELV","CALU","MORG","SUMN","STTH","GULF","NEWH","CANN","MISS"))
   actual <- sort(unique(temp_mloads_recent$SITE_ABB))
   expect_equal(actual, expected)
   
