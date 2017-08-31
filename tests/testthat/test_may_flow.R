@@ -56,8 +56,8 @@ test_that("may flow is less than corresponding annual flows for a given site/wat
 })
 
 test_that("Most recent water year has all of the necessary sites ", {
-  expected <- sort(c("HAZL","PADU","GRAN","HAST","CLIN","WAPE","KEOS","VALL","GRAF","SIDN","OMAH","ELKH","LOUI","DESO","HERM","THEB","SEDG","HARR","LITT","LONG","KERS",
-                                                       "STFR","BATO","BELL","MELV","CALU","MORG","VICK","SUMN","STTH","ALEX","NEWH","CANN"))
+  expected <- sort(c("HAZL","PADU","GRAN","HAST","CLIN","WAPE","KEOS","VALL","GRAF","SIDN","OMAH","ELKH","LOUI","DESO","HERM","THEB","SEDG","HARR","LITT","KERS",
+                                                       "STFR","BATO","BELL","MELV","CALU","MORG","SUMN","GULF","STTH","ALEX","NEWH","CANN"))
   actual <- sort(unique(temp_mflow_recent$SITE_ABB))
   expect_equal(actual, expected)
 })
@@ -81,3 +81,5 @@ test_that("There are no duplicate values", {
   expect_no_errors(result)
   
 })
+
+

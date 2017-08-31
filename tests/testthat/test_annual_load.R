@@ -81,7 +81,7 @@ test_that("annual loads for the GULF are included", {
 
 
 test_that("the expected modtypes are present", {
-  expected <- sort(c("REG","REG_2","REG_3","REG_4","REG_PRELIM","REGHIST","DAILY","CONTIN","COMP"))
+  expected <- sort(c("REG","REG_2","REG_3","REG_4","REGHIST","DAILY"))
   actual <- sort(unique(as.character(aloads$MODTYPE)))
   expect_equal(actual, expected)
   
@@ -108,9 +108,9 @@ test_that("There are no duplicate values", {
 })
 
 test_that("Most recent water year has all of the necessary sites ", {
-  temp_aloads_recent<-temp_aloads[temp_aloads$WY %in% max(temp_aloads$WY),] 
+  temp_aloads_recent<-temp_aloads[temp_aloads$WY%in%max(temp_aloads$WY),] 
   expected <- sort(c("HAZL","PADU","GRAN","CLIN","WAPE","KEOS","VALL","GRAF","SIDN","OMAH","ELKH","LOUI","DESO","HERM","THEB","SEDG","HARR","LITT","KERS",
                      "STFR","BATO","BELL","MELV","CALU","MORG","SUMN","STTH","GULF","NEWH","CANN","MISS"))
-  actual <- sort(unique(temp_aloads_recent$SITE_ABB))
+  actual <- sort(unique(temp_aloads_recent[temp_aloads_recent$SITE_ABB%in%expected,"SITE_ABB"]))
   expect_equal(actual, expected)
 })
