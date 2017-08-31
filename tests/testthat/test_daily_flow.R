@@ -79,5 +79,13 @@ test_that("There are less than 367 daily flow values for any particular site/yea
 })
 
 
+test_that("Most recent water year has all of the necessary sites ", {
+  dflow_recent<-dflow[dflow$WY %in% max(dflow$WY),] 
+  expected <- sort(c("HAZL","PADU","GRAN","CLIN","WAPE","KEOS","VALL","GRAF","SIDN","OMAH","ELKH","LOUI","DESO","HERM","THEB","SEDG","HARR","LITT","KERS",
+                     "STFR","BATO","BELL","MELV","CALU","MORG","SUMN","STTH","NEWH","CANN"))
+  actual <- sort(unique(dflow_recent[dflow_recent$SITE_ABB%in%expected,"SITE_ABB"]))
+  expect_equal(actual, expected)
+})
+
 
 

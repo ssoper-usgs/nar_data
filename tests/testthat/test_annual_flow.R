@@ -62,3 +62,12 @@ test_that("There are no duplicate values", {
 
 })
 
+test_that("Most recent water year has all of the necessary sites ", {
+ aflow_recent<-aflow[aflow$WY %in% max(aflow$WY),] 
+  expected <- sort(c("HAZL","PADU","GRAN","CLIN","WAPE","KEOS","VALL","GRAF","SIDN","OMAH","ELKH","LOUI","DESO","HERM","THEB","SEDG","HARR","LITT","KERS",
+                     "STFR","BATO","BELL","MELV","CALU","MORG","SUMN","STTH","GULF","NEWH","CANN"))
+  actual <- sort(unique(aflow_recent[aflow_recent$SITE_ABB%in%expected,"SITE_ABB"]))
+  expect_equal(actual, expected)
+})
+
+
