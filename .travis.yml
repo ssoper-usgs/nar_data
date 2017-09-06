@@ -4,7 +4,7 @@ warnings_are_errors: false
 sudo: required
 before_script:
   - curl -s https://packagecloud.io/install/repositories/github/git-lfs/script.deb.sh | sudo bash
-  - sudo apt-get install git-lfs=1.1.0
+  - sudo apt-get install git-lfs=2.2.1
 # git-lfs 1.1.0 always prompts for a password, even when anonymous access is ok
 # to bypass the prompt tell git to use a dummy credentials file:
   - git config --global credential.helper 'store --file .anonymous-git-credentials'
