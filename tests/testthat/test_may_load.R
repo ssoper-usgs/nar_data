@@ -12,6 +12,7 @@ temp_mloads$TONS_U95_N<-as.numeric(temp_mloads$TONS_U95)
 
 temp_mloads_recent<-temp_mloads[temp_mloads$WY %in% max(temp_mloads$WY),] 
 
+#length(unique(temp_mloads_recent$SITE_ABB))
 
 #looking for more thorough explanation of the 'validate' library capabilities?
 #Run:
@@ -24,6 +25,7 @@ test_that("may load has the correct columns", {
 		"SITE_QW_ID",
 		"CONSTIT",
 		"WY",
+		"MONTH",
 		"MODTYPE",
 		"TONS",
 		"TONS_L95",
@@ -64,29 +66,28 @@ test_that("may loads for the MISS site are included", {
 	expect_gt(nrow(miss_sites), 0)
 })
 
-
 test_that("may loads are less than corresponding annual loads for a given site/water year/constituent", {
   tt<-left_join(temp_mloads, aloads, by = c("SITE_ABB" = "SITE_ABB", "WY" = "WY","CONSTIT"="CONSTIT"))
   tt<-tt[!is.na(tt$TONS.y),]
+  
   result <- validate::check_that(tt, 
                                  TONS_N < as.numeric(TONS.y)
                              
                                  
                                  )
-     expect_no_errors(result)
+  expect_no_errors(result)
 })
 
 
 
 test_that("Most recent water year has all of the necessary sites ", {
 
-  expected <- sort(c("HAZL","PADU","GRAN","CLIN","WAPE","KEOS","VALL","GRAF","SIDN","OMAH","ELKH","LOUI","DESO","HERM","THEB","SEDG","HARR","LITT","KERS",
-                                                                  "STFR","BATO","BELL","MELV","CALU","MORG","SUMN","STTH","GULF","NEWH","CANN","MISS"))
+  expected <- sort(c("HAZL","PADU","GRAN","CLIN","WAPE","KEOS","VALL","GRAF","SIDN","OMAH","ELKH","LOUI","DESO","HERM","THEB","SEDG","HARR","KERS","BELL","MORG",
+                                                                  "STFR","MELV","VICK","SUMN","STTH","GULF","NEWH","CANN","MISS","HAST"))
   actual <- sort(unique(temp_mloads_recent$SITE_ABB))
   expect_equal(actual, expected)
   
 })
-
 
 
 test_that("Load data have the correct number of significant digits", {
