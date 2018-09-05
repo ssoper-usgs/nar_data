@@ -10,12 +10,9 @@ temp_aloads$FWC_N<-as.numeric(temp_aloads$FWC)
 temp_aloads$YIELD_N<-as.numeric(temp_aloads$YIELD)
 temp_aloads$mod1<-as.character(temp_aloads$MODTYPE)
 temp_aloads[temp_aloads$mod1%in%"REGHIST","mod1"]<-"REG"
+temp_aloads<-temp_aloads[!is.na(temp_aloads$TONS_L95_N),]
+temp_aloads<-temp_aloads[!is.na(temp_aloads$TONS_U95_N),]
 
-
-
-#looking for more thorough explanation of the 'validate' library capabilities?
-#Run:
-# vignette("intro", package="validate")
 
 test_that("annual load has the correct columns", {
 	expect_has_names(aloads, c(
@@ -48,10 +45,6 @@ test_that("annual load's columns are correctly typed", {
 	expect_no_errors(result)
 })
 
-temp_aloads[temp_aloads$TONS_N<=temp_aloads$TONS_L95_N,]
-temp_aloads[temp_aloads$TONS_N>=temp_aloads$TONS_U95_N,]
-
-#temp_aloads[is.na(temp_aloads$WY),]
 
 test_that("annual load has a reasonable range of values", {
 	result <- validate::check_that(temp_aloads, 
@@ -66,6 +59,8 @@ test_that("annual load has a reasonable range of values", {
 	)
 	expect_no_errors(result)
 })
+
+
 
 test_that("annual loads for the MISS site are included", {
 	miss_sites <- subset(aloads, SITE_ABB == 'MISS')
@@ -109,8 +104,10 @@ test_that("There are no duplicate values", {
 
 test_that("Most recent water year has all of the necessary sites ", {
   temp_aloads_recent<-temp_aloads[temp_aloads$WY%in%max(temp_aloads$WY),] 
-  expected <- sort(c("HAZL","PADU","GRAN","CLIN","WAPE","KEOS","VALL","GRAF","SIDN","OMAH","ELKH","LOUI","DESO","HERM","THEB","SEDG","HARR","LITT","KERS",
-                     "STFR","BATO","BELL","MELV","CALU","MORG","SUMN","STTH","GULF","NEWH","CANN","MISS"))
+  expected <- sort(c("HAZL","PADU","GRAN","CLIN","WAPE","KEOS","VALL","GRAF","SIDN","OMAH","ELKH","LOUI","DESO","HERM","THEB","SEDG","HARR","KERS","MORG","BELL",
+                     "STFR","MELV","SUMN","STTH","GULF","NEWH","CANN","MISS"))
   actual <- sort(unique(temp_aloads_recent[temp_aloads_recent$SITE_ABB%in%expected,"SITE_ABB"]))
+
+  
   expect_equal(actual, expected)
 })
