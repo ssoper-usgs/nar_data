@@ -12,15 +12,7 @@ temp_aloads$mod1<-as.character(temp_aloads$MODTYPE)
 temp_aloads[temp_aloads$mod1%in%"REGHIST","mod1"]<-"REG"
 temp_aloads<-temp_aloads[!is.na(temp_aloads$TONS_L95_N),]
 temp_aloads<-temp_aloads[!is.na(temp_aloads$TONS_U95_N),]
-temp_aloads[temp_aloads$TONS_L95_N>temp_aloads$TONS_U95_N,]
-temp_aloads[temp_aloads$TONS_L95_N>temp_aloads$TONS_N,]
-temp_aloads[temp_aloads$TONS_N>temp_aloads$TONS_U95_N,]
-str(temp_aloads)
-#table(temp_aloads$WY)
 
-#looking for more thorough explanation of the 'validate' library capabilities?
-#Run:
-# vignette("intro", package="validate")
 
 test_that("annual load has the correct columns", {
 	expect_has_names(aloads, c(
@@ -53,10 +45,6 @@ test_that("annual load's columns are correctly typed", {
 	expect_no_errors(result)
 })
 
-#temp_aloads[temp_aloads$TONS_N<=temp_aloads$TONS_L95_N,]
-temp_aloads[!temp_aloads$TONS_N<temp_aloads$TONS_U95_N,]
-
-#temp_aloads[is.na(temp_aloads$WY),]
 
 test_that("annual load has a reasonable range of values", {
 	result <- validate::check_that(temp_aloads, 
@@ -119,7 +107,7 @@ test_that("Most recent water year has all of the necessary sites ", {
   expected <- sort(c("HAZL","PADU","GRAN","CLIN","WAPE","KEOS","VALL","GRAF","SIDN","OMAH","ELKH","LOUI","DESO","HERM","THEB","SEDG","HARR","KERS","MORG","BELL",
                      "STFR","MELV","SUMN","STTH","GULF","NEWH","CANN","MISS"))
   actual <- sort(unique(temp_aloads_recent[temp_aloads_recent$SITE_ABB%in%expected,"SITE_ABB"]))
-  cbind(expected,actual)
+
   
   expect_equal(actual, expected)
 })

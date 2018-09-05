@@ -5,8 +5,6 @@ context("may flow")
 options(scipen=999)
 temp_mflow<-mflow 
 temp_mflow_recent<-mflow[mflow$WY %in% max(mflow$WY),] 
-#length(unique(temp_mflow_recent$SITE_ABB))
-#unique(temp_mflow_recent$SITE_ABB)
 #looking for more thorough explanation of the 'validate' library capabilities?
 #Run:
 # vignette("intro", package="validate")
@@ -53,7 +51,7 @@ test_that("may flow is less than corresponding annual flows for a given site/wat
                                  FLOW.x < FLOW.y
                                  
   )
-  result
+
   expect_no_errors(result)
 })
 

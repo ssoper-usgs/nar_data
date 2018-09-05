@@ -25,7 +25,6 @@ test_that("may load has the correct columns", {
 		"SITE_QW_ID",
 		"CONSTIT",
 		"WY",
-		"MONTH",
 		"MODTYPE",
 		"TONS",
 		"TONS_L95",
