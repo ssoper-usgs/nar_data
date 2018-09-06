@@ -10,6 +10,16 @@ temp_pestsamp$CONCENTRATION_N<-as.numeric(temp_pestsamp$CONCENTRATION)
 #Run:
 # vignette("intro", package="validate")
 
+#note that as of 2017, the pestsamp file was too big to be loaded on the tracking page
+#the solution is to reduce the file to only those parameters graphed for each station
+#here is the code run to make that fix
+#pestsamp$un<-paste(pestsamp$SITE_QW_ID,pestsamp$CONSTIT,sep="_")
+#pestsites$un<-paste(pestsites$SITE_QW_ID,pestsites$HERB_SAMP,sep="_")
+#pestsites$un1<-paste(pestsites$SITE_QW_ID,pestsites$NONHERB_SAMP,sep="_")
+#pestsamp<-pestsamp[pestsamp$un%in%c(pestsites$un,pestsites$un1),]
+#pestsamp<-pestsamp[,-which(names(pestsamp)%in%"un")]
+#save(pestsamp, file="H:/nar_data/data/pestsamp.RData")
+
 test_that("pesticide sample data has the correct columns", {
 	expect_has_names(pestsamp, c(
 		"PARM_CD",
