@@ -93,5 +93,5 @@ test_that("pesticide remark data has only blank, less than, greater than, or E v
 
 test_that("pestsamp only contains the values relevant to the data displayed in the app.", {
   #the data release published on Science Base might contain many more values (100s of MBs CSV). We only want the values relevant to the app (10s of MBs CSV).
-  expect_lt(nrow(pestsamp), 2500)
+  expect_lt(nrow(pestsamp), 25000)
 })
