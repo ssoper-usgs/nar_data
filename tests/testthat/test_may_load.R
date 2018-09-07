@@ -60,9 +60,11 @@ test_that("may load has a reasonable range of values", {
 	expect_no_errors(result)
 })
 
-test_that("may loads for the MISS site are included", {
+test_that("may loads for the MISS site are included for multiple years", {
 	miss_sites <- subset(mloads, SITE_ABB == 'MISS')
-	expect_gt(nrow(miss_sites), 0)
+	YEAR_OF_FIRST_MISS_LOADS = 1993
+	num_years = max(mloads['WY']) - YEAR_OF_FIRST_MISS_LOADS
+	expect_gte(nrow(miss_sites), num_years) #this is a conservative lower bound -- there are likely  multiple entries for each constituent for each year
 })
 
 test_that("may loads are less than corresponding annual loads for a given site/water year/constituent", {
