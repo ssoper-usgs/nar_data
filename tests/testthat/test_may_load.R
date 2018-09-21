@@ -82,7 +82,7 @@ test_that("may loads are less than corresponding annual loads for a given site/w
 test_that("Most recent water year has all of the necessary sites ", {
 
   expected <- sort(c("HAZL","PADU","GRAN","CLIN","WAPE","KEOS","VALL","GRAF","SIDN","OMAH","ELKH","LOUI","DESO","HERM","THEB","SEDG","HARR","KERS","BELL","MORG",
-                                                                  "STFR","MELV","VICK","SUMN","STTH","GULF","NEWH","CANN","MISS","HAST"))
+                                                                  "STFR","MELV","VICK","SUMN","STTH","GULF","NEWH","CANN","MISS","HAST","LITT"))
   actual <- sort(unique(temp_mloads_recent$SITE_ABB))
   expect_equal(actual, expected)
   
